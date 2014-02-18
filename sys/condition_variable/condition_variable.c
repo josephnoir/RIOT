@@ -20,32 +20,58 @@
 
  #include "condition_variable.h"
 
+int pthread_cond_condattr_destroy(condattr_t *attr)
+{
+	attr = NULL;
+	return 0;
+}
+
+int pthread_cond_condattr_init(condattr_t *attr)
+{
+	attr = NULL;
+	return 0;
+}
+
 int pthread_cond_init(struct pthread_cond_t cond*, struct condattr_t attr*);
 {
-	return 1;
+	cond->val = 0;
+
+	cond->queue.priority = 0;
+    cond->queue.data = 0;
+    cond->queue.next = NULL;
+	return 0;
 }
 
 int pthread_cond_destroy(struct pthread_cond_t cond*);
 {
-	return 1;
+
+
+	return 0;
 }
 
 int pthread_cond_wait(struct pthread_cond_t cond*, struct mutex_t *mutex);
 {
-	return 1;
+	if (cond->val != 0) {
+        mutex_unlock(&mutex);       
+    }
+    else {
+        mutex_unlock_and_sleep(&mutex);
+    }
+	
+	return 0;
 }
 
 int pthread_cond_timed_wait(struct pthread_cond_t cond*, struct mutex_t *mutex, long milisec);
 {
-	return 1;
+	return 0;
 }
 
 int pthread_cond_signal(struct pthread_cond_t cond*);
 {
-	return 1;
+	return 0;
 }
 
 int pthread_cond_broadcast(struct pthread_cond_t cond*);
 {
-	return 1;
+	return 0;
 }
