@@ -20,6 +20,9 @@
 
  #include "condition_variable.h"
  #include "thread.h"
+ #include "vtimer.h"
+
+vtimer_t timer;
 
 int pthread_cond_condattr_destroy(condattr_t *attr)
 {
@@ -95,7 +98,54 @@ int pthread_cond_wait(struct pthread_cond_t cond*, struct mutex_t *mutex);
 
 int pthread_cond_timed_wait(struct pthread_cond_t cond*, struct mutex_t *mutex, const struct timespec *abstime);
 {
-	return 0;
+	queue_node_t n = NULL;
+    unsigned char is_sleeping = 0;
+    
+    while(1)
+    {
+        if (cond->val != 0) {
+
+            if (n != NULL) {
+                queue_remove(&(cond->queue), &n);
+            }
+            
+            mutex_unlock(&mutex);
+            return 0;
+        }
+        else {
+            
+            if (is_sleeping == 1) {
+                //return ETIMEDOUT;
+                if (n != NULL) {
+                    queue_remove(&(cond->queue), &n);
+                }
+
+                mutex_unlock(&mutex);
+                return -2;
+            }
+
+            if (n == NULL ) {
+                n.priority = (unsigned int) active_thread->priority;
+                n.data = (unsigned int) active_thread->pid;
+                n.next = NULL;
+                // potential starving
+                queue_priority_add(&(cond->queue), &n);
+            }
+            else {
+                if (n.priority != (unsigned int) active_thread->priority) {
+                    queue_remove(&(cond->queue), &n);
+                    n.priority = (unsigned int) active_thread->priority;
+                    queue_priority_add(&(cond->queue), &n);
+                }
+            }
+
+            is_sleeping = 1;
+            vtimer_set_wakeup(timer, (*(timex_t*)(abstime)), active_thread->pid);
+            mutex_unlock_and_sleep(&mutex);
+        }
+    }
+    // no way to arrive here
+    return -1;
 }
 
 int pthread_cond_signal(struct pthread_cond_t cond*);
