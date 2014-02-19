@@ -19,6 +19,7 @@
  */
 
  #include "condition_variable.h"
+ #include "thread.h"
 
 int pthread_cond_condattr_destroy(condattr_t *attr)
 {
@@ -68,7 +69,7 @@ int pthread_cond_wait(struct pthread_cond_t cond*, struct mutex_t *mutex);
             
             if (n == NULL ) {
                 n.priority = (unsigned int) active_thread->priority;
-                n.data = (unsigned int) active_thread;
+                n.data = (unsigned int) active_thread->pid;
                 n.next = NULL;
                 // potential starving
                 queue_priority_add(&(cond->queue), &n);
@@ -101,5 +102,10 @@ int pthread_cond_signal(struct pthread_cond_t cond*);
 
 int pthread_cond_broadcast(struct pthread_cond_t cond*);
 {
+    queue_node_t root = cond->queue;
+    while (root->next != NULL) {
+        root = root->next;
+        thread_wakeup((int)root.data);
+    }
 	return 0;
 }
