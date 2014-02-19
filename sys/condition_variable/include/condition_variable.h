@@ -65,7 +65,7 @@ int pthread_cond_condattr_init(struct pthread_condattr_t *attr);
  * @param attr pre-allocated condition attribute variable structure.
  * @return Always returns 0, always succeeds.
  */
-int pthread_cond_init(struct pthread_cond_t *cond, struct condattr_t *attr);
+int pthread_cond_init(struct pthread_cond_t *cond, struct pthread_condattr_t *attr);
 
 /**
  * @brief Destroy the condition variable cond

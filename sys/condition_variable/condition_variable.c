@@ -25,7 +25,7 @@
 
 struct vtimer_t timer;
 
-int pthread_cond_condattr_destroy(condattr_t *attr)
+int pthread_cond_condattr_destroy(struct pthread_condattr_t *attr)
 {
     if (attr != NULL)
     {
@@ -34,7 +34,7 @@ int pthread_cond_condattr_destroy(condattr_t *attr)
 	return 0;
 }
 
-int pthread_cond_condattr_init(condattr_t *attr)
+int pthread_cond_condattr_init(struct pthread_condattr_t *attr)
 {
     if (attr != NULL)
     {
@@ -43,7 +43,7 @@ int pthread_cond_condattr_init(condattr_t *attr)
 	return 0;
 }
 
-int pthread_cond_init(struct pthread_cond_t *cond, struct condattr_t *attr)
+int pthread_cond_init(struct pthread_cond_t *cond, struct pthread_condattr_t *attr)
 {
 	cond->val = 0;
 
