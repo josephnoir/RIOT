@@ -21,22 +21,29 @@
  #include "condition_variable.h"
  #include "thread.h"
  #include "vtimer.h"
+ #include "debug.h"
 
-vtimer_t timer;
+struct vtimer_t timer;
 
 int pthread_cond_condattr_destroy(condattr_t *attr)
 {
-	attr = NULL;
+    if (attr != NULL)
+    {
+        attr = NULL;
+    }
 	return 0;
 }
 
 int pthread_cond_condattr_init(condattr_t *attr)
 {
-	attr = NULL;
+    if (attr != NULL)
+    {
+        attr = NULL;
+    }
 	return 0;
 }
 
-int pthread_cond_init(struct pthread_cond_t cond*, struct condattr_t attr*);
+int pthread_cond_init(struct pthread_cond_t *cond, struct condattr_t *attr)
 {
 	cond->val = 0;
 
@@ -50,30 +57,33 @@ int pthread_cond_init(struct pthread_cond_t cond*, struct condattr_t attr*);
 	return 0;
 }
 
-int pthread_cond_destroy(struct pthread_cond_t cond*);
+int pthread_cond_destroy(struct pthread_cond_t *cond)
 {
     pthread_cond_init(cond, NULL);
 	return 0;
 }
 
-int pthread_cond_wait(struct pthread_cond_t cond*, struct mutex_t *mutex);
+int pthread_cond_wait(struct pthread_cond_t *cond, struct mutex_t *mutex)
 {
-    queue_node_t n = NULL;
+    queue_node_t n;
+    n.priority = 0;
+    n.data = 0;
+    n.next = NULL;
 
     while(1)
     {
     	if (cond->val != 0) {
 
-            if (n != NULL) {
+            if (n.priority != 0 && n.data != 0) {
                 queue_remove(&(cond->queue), &n);
             }
             
-            mutex_unlock(&mutex);
+            mutex_unlock(mutex);
             return 0;
         }
         else {
             
-            if (n == NULL ) {
+            if (n.priority == 0 && n.data == 0) {
                 n.priority = (unsigned int) active_thread->priority;
                 n.data = (unsigned int) active_thread->pid;
                 n.next = NULL;
@@ -89,42 +99,46 @@ int pthread_cond_wait(struct pthread_cond_t cond*, struct mutex_t *mutex);
                 }
             }
             
-            mutex_unlock_and_sleep(&mutex);
+            mutex_unlock_and_sleep(mutex);
         }
 	}
     // no way to arrive here
 	return -1;
 }
 
-int pthread_cond_timed_wait(struct pthread_cond_t cond*, struct mutex_t *mutex, const struct timespec *abstime);
+int pthread_cond_timed_wait(struct pthread_cond_t *cond, struct mutex_t *mutex, struct timespec *abstime)
 {
-	queue_node_t n = NULL;
+    queue_node_t n;
+    n.priority = 0;
+    n.data = 0;
+    n.next = NULL;
+
     unsigned char is_sleeping = 0;
-    
+
     while(1)
     {
         if (cond->val != 0) {
 
-            if (n != NULL) {
+            if (n.priority == 0 && n.data == 0) {
                 queue_remove(&(cond->queue), &n);
             }
             
-            mutex_unlock(&mutex);
+            mutex_unlock(mutex);
             return 0;
         }
         else {
             
             if (is_sleeping == 1) {
                 //return ETIMEDOUT;
-                if (n != NULL) {
+                if (n.priority != 0 && n.data != 0) {
                     queue_remove(&(cond->queue), &n);
                 }
 
-                mutex_unlock(&mutex);
+                mutex_unlock(mutex);
                 return -2;
             }
 
-            if (n == NULL ) {
+            if (n.priority == 0 && n.data == 0) {
                 n.priority = (unsigned int) active_thread->priority;
                 n.data = (unsigned int) active_thread->pid;
                 n.next = NULL;
@@ -140,29 +154,29 @@ int pthread_cond_timed_wait(struct pthread_cond_t cond*, struct mutex_t *mutex, 
             }
 
             is_sleeping = 1;
-            vtimer_set_wakeup(timer, (*(timex_t*)(abstime)), active_thread->pid);
-            mutex_unlock_and_sleep(&mutex);
+            vtimer_set_wakeup(&timer, (*(timex_t*)(abstime)), active_thread->pid);
+            mutex_unlock_and_sleep(mutex);
         }
     }
     // no way to arrive here
     return -1;
 }
 
-int pthread_cond_signal(struct pthread_cond_t cond*);
+int pthread_cond_signal(struct pthread_cond_t *cond)
 {
     queue_node_t root = cond->queue;
-    if (root->next != NULL) {
-        root = root->next;
+    if ((&root)->next != NULL) {
+        root = *(root.next);
         thread_wakeup((int)root.data);
     }
 	return 0;
 }
 
-int pthread_cond_broadcast(struct pthread_cond_t cond*);
+int pthread_cond_broadcast(struct pthread_cond_t *cond)
 {
     queue_node_t root = cond->queue;
-    while (root->next != NULL) {
-        root = root->next;
+    while ((&root)->next != NULL) {
+        root = *(root.next);
         thread_wakeup((int)root.data);
     }
 	return 0;
