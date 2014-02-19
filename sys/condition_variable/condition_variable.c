@@ -56,9 +56,8 @@ int pthread_cond_wait(struct pthread_cond_t cond*, struct mutex_t *mutex);
     while(1)
     {
     	if (cond->val != 0) {
-            
-            if (n != NULL)
-            {
+
+            if (n != NULL) {
                 queue_remove(&(cond->queue), &n);
             }
             
@@ -66,12 +65,23 @@ int pthread_cond_wait(struct pthread_cond_t cond*, struct mutex_t *mutex);
             return 0;
         }
         else {
-            n.priority = (unsigned int) active_thread->priority;
-            n.data = (unsigned int) active_thread;
-            n.next = NULL;
+            
+            if (n == NULL ) {
+                n.priority = (unsigned int) active_thread->priority;
+                n.data = (unsigned int) active_thread;
+                n.next = NULL;
+                // potential starving
+                queue_priority_add(&(cond->queue), &n);
+            }
+            else {
 
-            // potential starving
-            queue_priority_add(&(cond->queue), &n);
+                if (n.priority != (unsigned int) active_thread->priority) {
+                    queue_remove(&(cond->queue), &n);
+                    n.priority = (unsigned int) active_thread->priority;
+                    queue_priority_add(&(cond->queue), &n);
+                }
+            }
+            
             mutex_unlock_and_sleep(&mutex);
         }
 	}
