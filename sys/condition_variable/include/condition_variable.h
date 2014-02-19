@@ -21,6 +21,7 @@
 #ifndef _CONDITION_VARIABLE_H
 #define _CONDITION_VARIABLE_H
 
+#include <time.h>
 #include "mutex.h"
 
 typedef struct condattr_t {

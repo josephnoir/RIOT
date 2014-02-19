@@ -106,7 +106,7 @@ int pthread_cond_wait(struct pthread_cond_t *cond, struct mutex_t *mutex)
 	return -1;
 }
 
-int pthread_cond_timed_wait(struct pthread_cond_t *cond, struct mutex_t *mutex, struct timespec *abstime)
+int pthread_cond_timed_wait(struct pthread_cond_t *cond, struct mutex_t *mutex, const struct timespec *abstime)
 {
     queue_node_t n;
     n.priority = 0;
