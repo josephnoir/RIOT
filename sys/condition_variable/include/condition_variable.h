@@ -24,10 +24,20 @@
 #include <time.h>
 #include "mutex.h"
 
-typedef struct condattr_t {
-	// no attributes by now
-}condattr_t;
+typedef struct pthread_condattr_t {
+	int __dummy;
+}pthread_condattr_t;
 
+/* // real definition
+typedef struct {
+    struct _pthread_fastlock __c_lock;
+    _pthread_descr __c_waiting;
+    char __padding[48 - sizeof(struct _pthread_fastlock) -
+		   sizeof(_pthread_descr) -
+		   sizeof(__pthread_cond_align_t)];
+    __pthread_cond_align_t __align;
+} pthread_cond_t;
+*/
 
 typedef struct pthread_cond_t {
     /* fields are managed by cv functions, don't touch */
@@ -40,14 +50,14 @@ typedef struct pthread_cond_t {
  * @param attr pre-allocated condition attribute variable structure.
  * @return Always returns 0, always succeeds.
  */
-int pthread_cond_condattr_destroy(condattr_t *attr);
+int pthread_cond_condattr_destroy(struct pthread_condattr_t *attr);
 
 /**
  * @brief Uninitializes a condition attribute variable object
  * @param attr pre-allocated condition attribute variable structure.
  * @return Always returns 0, always succeeds.
  */
-int pthread_cond_condattr_init(condattr_t *attr);
+int pthread_cond_condattr_init(struct pthread_condattr_t *attr);
 
 /**
  * @brief Initializes a condition variable object
