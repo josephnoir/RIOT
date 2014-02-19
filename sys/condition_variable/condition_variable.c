@@ -51,17 +51,21 @@ int pthread_cond_destroy(struct pthread_cond_t cond*);
 
 int pthread_cond_wait(struct pthread_cond_t cond*, struct mutex_t *mutex);
 {
+    queue_node_t n = NULL;
+
     while(1)
     {
     	if (cond->val != 0) {
-
-            queue_remove();
+            
+            if (n != NULL)
+            {
+                queue_remove(&(cond->queue), &n);
+            }
+            
             mutex_unlock(&mutex);
             return 0;
-
         }
         else {
-            queue_node_t n;
             n.priority = (unsigned int) active_thread->priority;
             n.data = (unsigned int) active_thread;
             n.next = NULL;
@@ -71,6 +75,7 @@ int pthread_cond_wait(struct pthread_cond_t cond*, struct mutex_t *mutex);
             mutex_unlock_and_sleep(&mutex);
         }
 	}
+    // no way to arrive here
 	return -1;
 }
 
