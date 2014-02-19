@@ -93,7 +93,7 @@ int pthread_cond_wait(struct pthread_cond_t cond*, struct mutex_t *mutex);
 	return -1;
 }
 
-int pthread_cond_timed_wait(struct pthread_cond_t cond*, struct mutex_t *mutex, long milisec);
+int pthread_cond_timed_wait(struct pthread_cond_t cond*, struct mutex_t *mutex, const struct timespec *abstime);
 {
 	return 0;
 }

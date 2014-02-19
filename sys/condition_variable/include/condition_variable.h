@@ -75,10 +75,10 @@ int pthread_cond_wait(struct pthread_cond_t cond*, struct mutex_t *mutex);
  * @brief blocks the calling thread until the specified condition cond is signalled
  * @param cond pre-allocated condition variable structure.
  * @param mutex pre-allocated mutex variable structure.
- * @param milisec pre-allocated timeout.
+ * @param abstime pre-allocated timeout.
  * @return Always returns 0, always succeeds.
  */
-int pthread_cond_timed_wait(struct pthread_cond_t cond*, struct mutex_t *mutex, long milisec);
+int pthread_cond_timed_wait(struct pthread_cond_t cond*, struct mutex_t *mutex, const struct timespec *abstime);
 
 /**
  * @brief unblock at least one of the threads that are blocked on the specified condition variable cond
