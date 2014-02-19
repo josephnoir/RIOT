@@ -97,6 +97,11 @@ int pthread_cond_timed_wait(struct pthread_cond_t cond*, struct mutex_t *mutex, 
 
 int pthread_cond_signal(struct pthread_cond_t cond*);
 {
+    queue_node_t root = cond->queue;
+    if (root->next != NULL) {
+        root = root->next;
+        thread_wakeup((int)root.data);
+    }
 	return 0;
 }
 
