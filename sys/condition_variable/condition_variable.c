@@ -40,7 +40,7 @@ int pthread_cond_init(struct pthread_cond_t cond*, struct condattr_t attr*);
     if (attr != NULL) {
         DEBUG("pthread_cond_init: currently attributes are not supported.\n");
     }
-    
+
 	cond->queue.priority = 0;
     cond->queue.data = 0;
     cond->queue.next = NULL;
@@ -49,8 +49,7 @@ int pthread_cond_init(struct pthread_cond_t cond*, struct condattr_t attr*);
 
 int pthread_cond_destroy(struct pthread_cond_t cond*);
 {
-
-
+    pthread_cond_init(cond, NULL);
 	return 0;
 }
 
