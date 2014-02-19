@@ -37,6 +37,10 @@ int pthread_cond_init(struct pthread_cond_t cond*, struct condattr_t attr*);
 {
 	cond->val = 0;
 
+    if (attr != NULL) {
+        DEBUG("pthread_cond_init: currently attributes are not supported.\n");
+    }
+    
 	cond->queue.priority = 0;
     cond->queue.data = 0;
     cond->queue.next = NULL;
