@@ -27,40 +27,38 @@ struct vtimer_t timer;
 
 int pthread_cond_condattr_destroy(struct pthread_condattr_t *attr)
 {
-    if (attr != NULL)
-    {
-        attr = NULL;
+    if (attr != NULL) {
+       DEBUG("pthread_cond_condattr_destroy: currently attributes are not supported.\n");
     }
-	return 0;
+    return 0;
 }
 
 int pthread_cond_condattr_init(struct pthread_condattr_t *attr)
 {
-    if (attr != NULL)
-    {
-        attr = NULL;
+    if (attr != NULL) {
+        DEBUG("pthread_cond_condattr_init: currently attributes are not supported.\n");
     }
-	return 0;
+    return 0;
 }
 
 int pthread_cond_init(struct pthread_cond_t *cond, struct pthread_condattr_t *attr)
 {
-	cond->val = 0;
+    cond->val = 0;
 
     if (attr != NULL) {
         DEBUG("pthread_cond_init: currently attributes are not supported.\n");
     }
 
-	cond->queue.priority = 0;
+    cond->queue.priority = 0;
     cond->queue.data = 0;
     cond->queue.next = NULL;
-	return 0;
+    return 0;
 }
 
 int pthread_cond_destroy(struct pthread_cond_t *cond)
 {
     pthread_cond_init(cond, NULL);
-	return 0;
+    return 0;
 }
 
 int pthread_cond_wait(struct pthread_cond_t *cond, struct mutex_t *mutex)
@@ -70,10 +68,8 @@ int pthread_cond_wait(struct pthread_cond_t *cond, struct mutex_t *mutex)
     n.data = 0;
     n.next = NULL;
 
-    while(1)
-    {
-    	if (cond->val != 0) {
-
+    while(1) {
+        if (cond->val != 0) {
             if (n.priority != 0 && n.data != 0) {
                 queue_remove(&(cond->queue), &n);
             }
@@ -82,7 +78,6 @@ int pthread_cond_wait(struct pthread_cond_t *cond, struct mutex_t *mutex)
             return 0;
         }
         else {
-            
             if (n.priority == 0 && n.data == 0) {
                 n.priority = (unsigned int) active_thread->priority;
                 n.data = (unsigned int) active_thread->pid;
@@ -90,20 +85,17 @@ int pthread_cond_wait(struct pthread_cond_t *cond, struct mutex_t *mutex)
                 // potential starving
                 queue_priority_add(&(cond->queue), &n);
             }
-            else {
-
-                if (n.priority != (unsigned int) active_thread->priority) {
+            else if (n.priority != (unsigned int) active_thread->priority) {
                     queue_remove(&(cond->queue), &n);
                     n.priority = (unsigned int) active_thread->priority;
                     queue_priority_add(&(cond->queue), &n);
-                }
             }
             
             mutex_unlock_and_sleep(mutex);
         }
-	}
+    }
     // no way to arrive here
-	return -1;
+    return -1;
 }
 
 int pthread_cond_timed_wait(struct pthread_cond_t *cond, struct mutex_t *mutex, const struct timespec *abstime)
@@ -115,8 +107,7 @@ int pthread_cond_timed_wait(struct pthread_cond_t *cond, struct mutex_t *mutex, 
 
     unsigned char is_sleeping = 0;
 
-    while(1)
-    {
+    while(1) {
         if (cond->val != 0) {
 
             if (n.priority == 0 && n.data == 0) {
@@ -127,7 +118,6 @@ int pthread_cond_timed_wait(struct pthread_cond_t *cond, struct mutex_t *mutex, 
             return 0;
         }
         else {
-            
             if (is_sleeping == 1) {
                 //return ETIMEDOUT;
                 if (n.priority != 0 && n.data != 0) {
@@ -137,7 +127,6 @@ int pthread_cond_timed_wait(struct pthread_cond_t *cond, struct mutex_t *mutex, 
                 mutex_unlock(mutex);
                 return -2;
             }
-
             if (n.priority == 0 && n.data == 0) {
                 n.priority = (unsigned int) active_thread->priority;
                 n.data = (unsigned int) active_thread->pid;
@@ -145,12 +134,10 @@ int pthread_cond_timed_wait(struct pthread_cond_t *cond, struct mutex_t *mutex, 
                 // potential starving
                 queue_priority_add(&(cond->queue), &n);
             }
-            else {
-                if (n.priority != (unsigned int) active_thread->priority) {
+            else if (n.priority != (unsigned int) active_thread->priority) {
                     queue_remove(&(cond->queue), &n);
                     n.priority = (unsigned int) active_thread->priority;
                     queue_priority_add(&(cond->queue), &n);
-                }
             }
 
             is_sleeping = 1;
@@ -164,20 +151,20 @@ int pthread_cond_timed_wait(struct pthread_cond_t *cond, struct mutex_t *mutex, 
 
 int pthread_cond_signal(struct pthread_cond_t *cond)
 {
-    queue_node_t root = cond->queue;
-    if ((&root)->next != NULL) {
-        root = *(root.next);
-        thread_wakeup((int)root.data);
+    queue_node_t *root = &(cond->queue);
+    if (root->next != NULL) {
+        root = root->next;
+        thread_wakeup((int)root->data);
     }
-	return 0;
+    return 0;
 }
 
 int pthread_cond_broadcast(struct pthread_cond_t *cond)
 {
-    queue_node_t root = cond->queue;
-    while ((&root)->next != NULL) {
-        root = *(root.next);
-        thread_wakeup((int)root.data);
+    queue_node_t *root = &(cond->queue);
+    while (root->next != NULL) {
+        root = root->next;
+        thread_wakeup((int)root->data);
     }
-	return 0;
+    return 0;
 }
