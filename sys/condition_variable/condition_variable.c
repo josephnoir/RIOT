@@ -86,9 +86,9 @@ int pthread_cond_wait(struct pthread_cond_t *cond, struct mutex_t *mutex)
                 queue_priority_add(&(cond->queue), &n);
             }
             else if (n.priority != (unsigned int) active_thread->priority) {
-                    queue_remove(&(cond->queue), &n);
-                    n.priority = (unsigned int) active_thread->priority;
-                    queue_priority_add(&(cond->queue), &n);
+                queue_remove(&(cond->queue), &n);
+                n.priority = (unsigned int) active_thread->priority;
+                queue_priority_add(&(cond->queue), &n);
             }
             
             mutex_unlock_and_sleep(mutex);
@@ -134,9 +134,9 @@ int pthread_cond_timed_wait(struct pthread_cond_t *cond, struct mutex_t *mutex, 
                 queue_priority_add(&(cond->queue), &n);
             }
             else if (n.priority != (unsigned int) active_thread->priority) {
-                    queue_remove(&(cond->queue), &n);
-                    n.priority = (unsigned int) active_thread->priority;
-                    queue_priority_add(&(cond->queue), &n);
+                queue_remove(&(cond->queue), &n);
+                n.priority = (unsigned int) active_thread->priority;
+                queue_priority_add(&(cond->queue), &n);
             }
 
             is_sleeping = 1;
