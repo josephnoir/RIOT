@@ -117,7 +117,7 @@ int pthread_cond_timed_wait(struct pthread_cond_t *cond, struct mutex_t *mutex, 
             return 0;
         }
         else {
-            if (is_sleeping == 1) {
+            if (is_sleeping != 0) {
                 //return ETIMEDOUT;
                 if (n.priority != 0 && n.data != 0) {
                     queue_remove(&(cond->queue), &n);
