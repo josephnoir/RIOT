@@ -2,13 +2,13 @@
 
 cppMix::cppMix()
 {
-	printf("Instanciating Object [constructor called]\n");
+    printf("Instanciating Object [constructor called]\n");
     greet();
 }
 
 cppMix::~cppMix()
 {
-	printf("Destroying Object [destructor called]\n");
+    printf("Destroying Object [destructor called]\n");
     printf("Im shutting down!\n");
 }
 
