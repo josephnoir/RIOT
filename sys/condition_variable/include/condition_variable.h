@@ -25,7 +25,7 @@
 #include "mutex.h"
 
 typedef struct pthread_condattr_t {
-	int __dummy;
+    int __dummy;
 }pthread_condattr_t;
 
 /* // real definition
@@ -33,8 +33,8 @@ typedef struct {
     struct _pthread_fastlock __c_lock;
     _pthread_descr __c_waiting;
     char __padding[48 - sizeof(struct _pthread_fastlock) -
-		   sizeof(_pthread_descr) -
-		   sizeof(__pthread_cond_align_t)];
+           sizeof(_pthread_descr) -
+           sizeof(__pthread_cond_align_t)];
     __pthread_cond_align_t __align;
 } pthread_cond_t;
 */

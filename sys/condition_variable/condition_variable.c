@@ -109,7 +109,6 @@ int pthread_cond_timed_wait(struct pthread_cond_t *cond, struct mutex_t *mutex, 
 
     while(1) {
         if (cond->val != 0) {
-
             if (n.priority == 0 && n.data == 0) {
                 queue_remove(&(cond->queue), &n);
             }
