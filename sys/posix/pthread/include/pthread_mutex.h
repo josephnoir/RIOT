@@ -5,6 +5,8 @@
 #include "kernel.h"
 #include "mutex.h"
 
+#define PTHREAD_MUTEX_INITIALIZER {0, {NULL, 0, 0}}
+
 /* Initialize a mutex.  */
 int pthread_mutex_init(pthread_mutex_t *mutex,
         const pthread_mutexattr_t *mutexattr);
