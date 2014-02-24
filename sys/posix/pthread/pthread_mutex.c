@@ -25,35 +25,36 @@ int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *mutexa
 {
     (void) mutexattr;
 
-    return mutex_init(mutex);
+    return (mutex_init(mutex) == 1 ? 0 : -1);
 }
 
 int pthread_mutex_destroy(pthread_mutex_t *mutex)
 {
     (void) mutex;
 
-    return 1;
+    return 0;
 }
 
 int pthread_mutex_trylock(pthread_mutex_t *mutex)
 {
-    return mutex_trylock(mutex);
+    return (mutex_trylock(mutex) == 1 ? 0 : -1);
 }
 
 int pthread_mutex_lock(pthread_mutex_t *mutex)
 {
-    return mutex_lock(mutex);
+    return (mutex_lock(mutex) == 1 ? 0 : -1);
 }
 
 int pthread_mutex_timedlock(pthread_mutex_t *mutex, const struct timespec *abstime)
 {
     (void) mutex;
     (void) abstime;
-    return 0; /* currently not supported */
+    return -1; /* currently not supported */
 }
 
 int pthread_mutex_unlock(pthread_mutex_t *mutex)
 {
     mutex_unlock(mutex);
-    return 1;
+    return 0;
 }
+
