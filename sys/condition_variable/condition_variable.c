@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014
+ * Copyright (C) 2014 Hamburg University of Applied Siences (HAW)
  *
  * This file is subject to the terms and conditions of the GNU Lesser General
  * Public License. See the file LICENSE in the top level directory for more
@@ -13,23 +13,24 @@
  * @file        condition_variable.c
  * @brief       Condition variable implementation
  *
- * @author      
+ * @author      Martin Landsmann <martin.landsmann@haw-hamburg.de>
  *
  * @}
  */
 
- #include "condition_variable.h"
- #include "thread.h"
- #include "vtimer.h"
- #include "debug.h"
+#include "condition_variable.h"
+#include "thread.h"
+#include "vtimer.h"
+#include "debug.h"
 
 struct vtimer_t timer;
 
 int pthread_cond_condattr_destroy(struct pthread_condattr_t *attr)
 {
     if (attr != NULL) {
-       DEBUG("pthread_cond_condattr_destroy: currently attributes are not supported.\n");
+        DEBUG("pthread_cond_condattr_destroy: currently attributes are not supported.\n");
     }
+
     return 0;
 }
 
@@ -38,6 +39,7 @@ int pthread_cond_condattr_init(struct pthread_condattr_t *attr)
     if (attr != NULL) {
         DEBUG("pthread_cond_condattr_init: currently attributes are not supported.\n");
     }
+
     return 0;
 }
 
@@ -68,12 +70,12 @@ int pthread_cond_wait(struct pthread_cond_t *cond, struct mutex_t *mutex)
     n.data = 0;
     n.next = NULL;
 
-    while(1) {
+    while (1) {
         if (cond->val != 0) {
             if (n.priority != 0 && n.data != 0) {
                 queue_remove(&(cond->queue), &n);
             }
-            
+
             mutex_unlock(mutex);
             return 0;
         }
@@ -90,10 +92,11 @@ int pthread_cond_wait(struct pthread_cond_t *cond, struct mutex_t *mutex)
                 n.priority = (unsigned int) active_thread->priority;
                 queue_priority_add(&(cond->queue), &n);
             }
-            
+
             mutex_unlock_and_sleep(mutex);
         }
     }
+
     // no way to arrive here
     return -1;
 }
@@ -107,12 +110,12 @@ int pthread_cond_timed_wait(struct pthread_cond_t *cond, struct mutex_t *mutex, 
 
     unsigned char is_sleeping = 0;
 
-    while(1) {
+    while (1) {
         if (cond->val != 0) {
             if (n.priority == 0 && n.data == 0) {
                 queue_remove(&(cond->queue), &n);
             }
-            
+
             mutex_unlock(mutex);
             return 0;
         }
@@ -126,6 +129,7 @@ int pthread_cond_timed_wait(struct pthread_cond_t *cond, struct mutex_t *mutex, 
                 mutex_unlock(mutex);
                 return -2;
             }
+
             if (n.priority == 0 && n.data == 0) {
                 n.priority = (unsigned int) active_thread->priority;
                 n.data = (unsigned int) active_thread->pid;
@@ -140,10 +144,11 @@ int pthread_cond_timed_wait(struct pthread_cond_t *cond, struct mutex_t *mutex, 
             }
 
             is_sleeping = 1;
-            vtimer_set_wakeup(&timer, (*(timex_t*)(abstime)), active_thread->pid);
+            vtimer_set_wakeup(&timer, (*(timex_t *)(abstime)), active_thread->pid);
             mutex_unlock_and_sleep(mutex);
         }
     }
+
     // no way to arrive here
     return -1;
 }
@@ -151,19 +156,23 @@ int pthread_cond_timed_wait(struct pthread_cond_t *cond, struct mutex_t *mutex, 
 int pthread_cond_signal(struct pthread_cond_t *cond)
 {
     queue_node_t *root = &(cond->queue);
+
     if (root->next != NULL) {
         root = root->next;
         thread_wakeup((int)root->data);
     }
+
     return 0;
 }
 
 int pthread_cond_broadcast(struct pthread_cond_t *cond)
 {
     queue_node_t *root = &(cond->queue);
+
     while (root->next != NULL) {
         root = root->next;
         thread_wakeup((int)root->data);
     }
+
     return 0;
 }

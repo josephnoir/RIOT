@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 
+ * Copyright (C) 2014 Hamburg University of Applied Siences (HAW)
  *
  * This file subject to the terms and conditions of the GNU Lesser General
  * Public License. See the file LICENSE in the top level directory for more
@@ -7,15 +7,15 @@
  */
 
 /**
- * @defgroup    
- * @brief       
+ * @defgroup
+ * @brief
  * @ingroup     sys
  * @{
  *
  * @file        condition_variable.h
  * @brief       RIOT POSIX condition variable API
  *
- * @author      
+ * @author      Martin Landsmann <martin.landsmann@haw-hamburg.de>
  */
 
 #ifndef _CONDITION_VARIABLE_H
@@ -26,7 +26,7 @@
 
 typedef struct pthread_condattr_t {
     int __dummy;
-}pthread_condattr_t;
+} pthread_condattr_t;
 
 /* // real definition
 typedef struct {
@@ -43,7 +43,7 @@ typedef struct pthread_cond_t {
     /* fields are managed by cv functions, don't touch */
     unsigned int val;
     queue_node_t queue;     // @internal
-}pthread_cond_t;
+} pthread_cond_t;
 
 /**
  * @brief Initializes a condition attribute variable object using default values
