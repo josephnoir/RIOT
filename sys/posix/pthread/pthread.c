@@ -306,3 +306,57 @@ int pthread_setschedprio(pthread_t target_thread, int prio)
     return 0;
 }
 
+#ifdef __USE_GNU
+
+/* Type for array elements in 'cpu_set_t'.  */
+typedef unsigned long int __cpu_mask;
+
+# define __CPU_SETSIZE  1024
+# define __NCPUBITS (8 * sizeof (__cpu_mask))
+
+typedef struct
+{
+    __cpu_mask __bits[__CPU_SETSIZE / __NCPUBITS];
+} cpu_set_t;
+
+/* Thread created with attribute ATTR will be limited to run only on
+   the processors represented in CPUSET.  */
+int pthread_attr_setaffinity_np (pthread_attr_t *__attr,
+                    size_t __cpusetsize,
+                    const cpu_set_t *__cpuset)
+     __THROW __nonnull ((1, 3))
+{
+    return 0;
+}
+
+/* Get bit set in CPUSET representing the processors threads created with
+   ATTR can run on.  */
+int pthread_attr_getaffinity_np (const pthread_attr_t *__attr,
+                    size_t __cpusetsize,
+                    cpu_set_t *__cpuset)
+     __THROW __nonnull ((1, 3))
+{
+    return 0;
+}
+
+/* Limit specified thread TH to run only on the processors represented
+   in CPUSET.  */
+int pthread_setaffinity_np (pthread_t __th, size_t __cpusetsize,
+                   const cpu_set_t *__cpuset)
+     __THROW __nonnull ((3))
+{
+    return 0;
+}
+
+/* Get bit set in CPUSET representing the processors TH can run on.  */
+int pthread_getaffinity_np (pthread_t __th, size_t __cpusetsize,
+                   cpu_set_t *__cpuset)
+     __THROW __nonnull ((3))
+{
+    return 0;
+}
+
+#endif
+
+
+

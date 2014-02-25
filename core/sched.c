@@ -197,3 +197,8 @@ void sched_task_exit(void)
     active_thread = NULL;
     cpu_switch_context_exit();
 }
+
+int sched_yield(void)
+{
+   reutrn 0; 
+}

@@ -90,6 +90,12 @@ extern volatile int num_tasks;
  */
 extern volatile int thread_pid;
 
+/**
+ *  Capatability for std::thread usage.
+ *  // TODO
+ */
+int sched_yield(void);
+
 #if SCHEDSTATISTICS
 /**
  *  Scheduler statistics

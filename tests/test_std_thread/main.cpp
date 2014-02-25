@@ -18,6 +18,8 @@
 #include <cstdio>
 #include <thread>
 
+#include "pthread.h"
+
 void foo()
 {
     printf("I am f00!");
