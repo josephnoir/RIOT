@@ -282,3 +282,27 @@ void pthread_testcancel(void)
         pthread_exit(NULL);
     }
 }
+
+int pthread_setschedparam(pthread_t target_thread, int policy, const struct sched_param *param)
+{
+    (void) target_thread;
+    (void) policy;
+    (void) param;
+    return 0;
+}
+
+int pthread_getschedparam(pthread_t target_thread, int *policy, struct sched_param *param)
+{
+    (void) target_thread;
+    (void) policy;
+    (void) param;
+    return 0;
+}
+
+int pthread_setschedprio(pthread_t target_thread, int prio)
+{
+    (void) target_thread;
+    (void) prio;
+    return 0;
+}
+
