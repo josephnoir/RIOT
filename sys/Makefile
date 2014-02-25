@@ -6,7 +6,7 @@ ifneq (,$(filter config,$(USEMODULE)))
     DIRS += config
 endif
 ifneq (,$(filter condition_variable,$(USEMODULE)))
-	INCLUDES += -I$(RIOTBASE)/sys/condition_variable/include
+    INCLUDES += -I$(RIOTBASE)/sys/condition_variable/include
     DIRS += condition_variable
 endif
 ifneq (,$(filter lib,$(USEMODULE)))
