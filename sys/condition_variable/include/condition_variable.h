@@ -24,6 +24,8 @@
 #include <time.h>
 #include "mutex.h"
 
+#define PTHREAD_COND_INITIALIZER {0, {NULL, 0, 0}}
+
 typedef struct pthread_condattr_t {
     int __dummy;
 } pthread_condattr_t;

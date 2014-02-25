@@ -88,6 +88,18 @@ int pthread_cancel(pthread_t th);
  cancelled.  */
 void pthread_testcancel(void);
 
+/* TODO */
+void *pthread_getspecific(pthread_key_t key);
+
+/* TODO */
+int pthread_setspecific(pthread_key_t key, const void *value);
+
+/* TODO */
+int pthread_key_create(pthread_key_t *key, void (*destructor)(void*));
+
+/* TODO */
+int pthread_key_delete(pthread_key_t key);
+
 #include "pthread_mutex.h"
 
 #include "pthread_rwlock.h"
@@ -95,5 +107,7 @@ void pthread_testcancel(void);
 #include "pthread_spin.h"
 
 #include "pthread_barrier.h"
+
+#include "pthread_cond.h"
 
 #endif	/* pthread.h */

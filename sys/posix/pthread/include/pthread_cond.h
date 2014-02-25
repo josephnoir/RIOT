@@ -1,5 +1,7 @@
 /* Functions for handling conditional variables.  */
 
+#define PTHREAD_COND_INITIALIZER {0, {NULL, 0, 0}}
+
 /* Initialize condition variable COND using attributes ATTR, or use
  the default values if later is NULL.  */
 int pthread_cond_init(pthread_cond_t *cond,

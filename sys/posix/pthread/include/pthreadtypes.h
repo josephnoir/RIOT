@@ -3,6 +3,10 @@
 
 typedef unsigned long int pthread_t;
 
+/* Keys for thread-specific data */
+typedef unsigned int pthread_key_t;
+
+
 typedef struct pthread_attr
 {
     uint8_t detached;

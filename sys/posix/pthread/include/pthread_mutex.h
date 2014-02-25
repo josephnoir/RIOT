@@ -6,6 +6,7 @@
 #include "mutex.h"
 
 #define PTHREAD_MUTEX_INITIALIZER {0, {NULL, 0, 0}}
+#define PTHREAD_MUTEX_RECURSIVE NULL 
 
 /* Initialize a mutex.  */
 int pthread_mutex_init(pthread_mutex_t *mutex,

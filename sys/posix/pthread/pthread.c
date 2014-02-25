@@ -358,5 +358,27 @@ int pthread_getaffinity_np (pthread_t __th, size_t __cpusetsize,
 
 #endif
 
+void *pthread_getspecific(pthread_key_t key)
+{
+    (void) key;
+}
 
+int pthread_setspecific(pthread_key_t key, const void *value)
+{
+    (void) key;
+    (void) value;
+    return 0;
+}
 
+int pthread_key_create(pthread_key_t *key, void (*destructor)(void*))
+{
+    (void) key;
+    (void) destructor;
+    return 0;
+}
+
+int pthread_key_delete(pthread_key_t key)
+{
+    (void) key;
+    return 0;
+}
