@@ -48,6 +48,14 @@
 int close(int fildes);
 
 /**
+ * TODO implement this
+ * return type was ssize_t
+ */
+size_t write(int, const void *, size_t);
+
+pid_t getpid(void);
+
+/**
  * @}
  */
 #endif /* _UNISTD_H */

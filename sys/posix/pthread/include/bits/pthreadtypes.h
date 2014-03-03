@@ -26,6 +26,9 @@ typedef int pthread_once_t;
 typedef unsigned long int pthread_barrier_t;
 typedef unsigned long int pthread_barrierattr_t;
 
+typedef unsigned long int pthread_cond_t;
+typedef unsigned long int pthread_condattr_t;
+
 typedef mutex_t pthread_mutex_t;
 typedef unsigned long int pthread_mutexattr_t;
 

@@ -25,6 +25,7 @@ ifeq ($(BOARD),native)
                        -I$(RIOTBASE)/sys/posix/include
 endif
 
+CFLAGS += -D__STRICT_ANSI__
 
 INCLUDES += -I$(CURDIR)/
 

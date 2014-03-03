@@ -22,7 +22,11 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+
+#define __USE_POSIX
 #include <netdb.h>
+#undef __USE_POSIX
+
 #include <arpa/inet.h>
 #include <sys/un.h>
 #include <fcntl.h>

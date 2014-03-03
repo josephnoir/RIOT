@@ -110,4 +110,6 @@ int pthread_key_delete(pthread_key_t key);
 
 #include "pthread_cond.h"
 
+#include "missing.h"
+
 #endif	/* pthread.h */

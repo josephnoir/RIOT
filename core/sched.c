@@ -200,5 +200,5 @@ void sched_task_exit(void)
 
 int sched_yield(void)
 {
-   reutrn 0; 
+   return 0; 
 }
