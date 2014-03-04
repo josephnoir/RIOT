@@ -9,9 +9,9 @@ export RIOTBASE = $(CURDIR)/../..
 
 # switches for c++/c mixedmode
 export CPPMIX = 1
-export CPPMIXCC = g++
+export CPPMIXCC = g++ -g -static-libstdc++ -L/home/developer/Desktop/test/RIOT/tests/test_std_thread
 #export CPPMIXEXTRALIBS
-export CPPMIXCFLAGS = -std=c++11 #-pthread
+export CPPMIXCFLAGS = -std=c++11
 
 ## Modules to include.
 
@@ -20,6 +20,7 @@ USEMODULE += pthread
 
 ifeq ($(BOARD),native)
     CFLAGS += -isystem $(RIOTBASE)/sys/posix/pthread/include
+   # CXXFLAGS += -isystem $(RIOTBASE)/sys/posix/pthread/include
 #else
     export INCLUDES += -I$(RIOTBASE)/sys/posix/pthread/include \
                        -I$(RIOTBASE)/sys/posix/include

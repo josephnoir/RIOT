@@ -105,7 +105,7 @@ static void pthread_reaper(void)
 }
 
 int pthread_create(pthread_t *newthread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg)
-{
+{puts("create");
     pthread_thread_t *pt = calloc(1, sizeof(pthread_thread_t));
 
     int pthread_pid = insert(pt);
@@ -182,7 +182,7 @@ void pthread_exit(void *retval)
 }
 
 int pthread_join(pthread_t th, void **thread_return)
-{
+{puts("join");
     pthread_thread_t *other = pthread_sched_threads[th];
     if (!other) {
         return -1;

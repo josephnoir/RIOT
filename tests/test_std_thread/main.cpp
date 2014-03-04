@@ -15,23 +15,38 @@
  *
  */
 
-#include "pthread.h"
-
 #include <cstdio>
 #include <thread>
-
-//#include "pthread.h"
+#include <exception>
+#include "pthread.h"
 
 
 void foo()
 {
-    printf("I am f00!");
+    printf("I am f00!\n");
 }
 
 int main() {
-    printf("Hello c++\n");
+
+   printf("Hello c++\n");
+
+  //void * ptr1 = (void *) &pthread_create;
+  void * ptr2 = (void *) &pthread_join;
+//printf("%p\n", ptr2);
+
     std::thread bar (foo);
-    bar.join();
-    printf("Done\n");
+std::thread::id x = bar.get_id();
+printf("%p\n", &x);
+
+//thread_yield();
+
+try{
+   bar.join();
+}catch(std::exception& e)
+ {
+   printf("%s\n", e.what());
+  }  
+
+  printf("Done\n");
 }
 

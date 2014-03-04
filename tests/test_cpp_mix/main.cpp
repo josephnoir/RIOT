@@ -16,11 +16,13 @@
  */
 
 #include <cstdio>
+#include "pthread.h"
 #include "cppMix.hpp"
 
 int main() {
     printf("Hello c++\n");
-
+printf("%p\n", (void *)&pthread_create);
     cppMix oMix;
-    oMix.sayHello();        
+    oMix.sayHello();
+        
 }

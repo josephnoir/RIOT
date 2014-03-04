@@ -9,6 +9,10 @@
 
 #include "pthreadtypes.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Create a new thread, starting with execution of START-ROUTINE
  getting passed ARG.  Creation attributed come from ATTR.  The new
  handle is stored in *NEWTHREAD.  */
@@ -111,5 +115,9 @@ int pthread_key_delete(pthread_key_t key);
 #include "pthread_cond.h"
 
 #include "missing.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif	/* pthread.h */

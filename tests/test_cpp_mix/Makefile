@@ -19,7 +19,9 @@ USEMODULE += shell
 USEMODULE += shell_commands
 USEMODULE += ps
 USEMODULE += posix
+USEMODULE += pthread
 
 INCLUDES += -I$(CURDIR)/
+INCLUDES += -I$(RIOTBASE)/sys/posix/pthread/include/
 
 include $(RIOTBASE)/Makefile.include
