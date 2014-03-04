@@ -1,6 +1,8 @@
 #ifndef PTHREADTYPES_H_
 #define PTHREADTYPES_H_
 
+#include <stdint.h>
+
 typedef unsigned long int pthread_t;
 
 /* Keys for thread-specific data */
@@ -13,6 +15,7 @@ typedef struct pthread_attr
     char *ss_sp;
     size_t ss_size;
 } pthread_attr_t;
+#define __have_pthread_attr_t 1
 
 struct sched_param {
     int todo; /* TODO */

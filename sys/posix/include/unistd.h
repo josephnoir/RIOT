@@ -24,6 +24,8 @@
 #ifndef _UNISTD_H
 #define _UNISTD_H
 
+#include <time.h>
+
 #define STDIN_FILENO    0   ///< stdin file descriptor
 #define STDOUT_FILENO   1   ///< stdout file descriptor
 #define STDERR_FILENO   2   ///< stderr file descriptor
@@ -51,7 +53,7 @@ int close(int fildes);
  * TODO implement this
  * return type was ssize_t
  */
-size_t write(int, const void *, size_t);
+//size_t write(int, const void *, size_t);
 
 pid_t getpid(void);
 

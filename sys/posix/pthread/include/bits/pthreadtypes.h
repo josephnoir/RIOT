@@ -1,18 +1,23 @@
 #ifndef PTHREADTYPES_H_
 #define PTHREADTYPES_H_
 
+#include <stdint.h>
+#include "mutex.h"
+
 typedef unsigned long int pthread_t;
 
 /* Keys for thread-specific data */
 typedef unsigned int pthread_key_t;
 
-
+# ifndef __have_pthread_attr_t
 typedef struct pthread_attr
 {
     uint8_t detached;
     char *ss_sp;
     size_t ss_size;
 } pthread_attr_t;
+#define __have_pthread_attr_t 1
+#endif
 
 struct sched_param {
     int todo; /* TODO */
@@ -25,9 +30,6 @@ typedef int pthread_once_t;
 
 typedef unsigned long int pthread_barrier_t;
 typedef unsigned long int pthread_barrierattr_t;
-
-typedef unsigned long int pthread_cond_t;
-typedef unsigned long int pthread_condattr_t;
 
 typedef mutex_t pthread_mutex_t;
 typedef unsigned long int pthread_mutexattr_t;

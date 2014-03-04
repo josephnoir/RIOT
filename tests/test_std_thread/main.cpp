@@ -15,10 +15,12 @@
  *
  */
 
+#include "pthread.h"
+
 #include <cstdio>
 #include <thread>
 
-#include "pthread.h"
+//#include "pthread.h"
 
 
 void foo()

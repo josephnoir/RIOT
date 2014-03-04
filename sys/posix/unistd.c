@@ -36,6 +36,7 @@ int close(int fildes)
     return 0;
 }
 
+/*
 size_t write(int a, const void * b, size_t c)
 {
     (void) a;
@@ -43,11 +44,14 @@ size_t write(int a, const void * b, size_t c)
     (void) c;
     return 0;
 }
+*/
+
 
 pid_t getpid(void)
 {
     return 0;
 }
+
 
 /**
  * @}

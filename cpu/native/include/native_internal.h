@@ -13,9 +13,9 @@
 #define _NATIVE_INTERNAL_H
 
 // todo: figure out what __USE_XOPEN_EXTENDED means...
-#define __USE_XOPEN_EXTENDED
+//#define __USE_XOPEN_EXTENDED
 #include <signal.h>
-#undef __USE_XOPEN_EXTENDED
+//#undef __USE_XOPEN_EXTENDED
 
 /* enable signal handler register access on different platforms
  * check here for more:

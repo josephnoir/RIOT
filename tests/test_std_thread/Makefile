@@ -11,7 +11,7 @@ export RIOTBASE = $(CURDIR)/../..
 export CPPMIX = 1
 export CPPMIXCC = g++
 #export CPPMIXEXTRALIBS
-export CPPMIXCFLAGS = -std=c++11
+export CPPMIXCFLAGS = -std=c++11 #-pthread
 
 ## Modules to include.
 
@@ -25,7 +25,7 @@ ifeq ($(BOARD),native)
                        -I$(RIOTBASE)/sys/posix/include
 endif
 
-CFLAGS += -D__STRICT_ANSI__
+#CFLAGS += -D__STRICT_ANSI__
 
 INCLUDES += -I$(CURDIR)/
 
