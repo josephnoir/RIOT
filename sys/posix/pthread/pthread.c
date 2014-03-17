@@ -32,7 +32,9 @@
 
 #include "pthread.h"
 
-#define ENABLE_DEBUG (1)
+#include <stdio.h>
+
+#define ENABLE_DEBUG (0)
 
 #if ENABLE_DEBUG
 #   define PTHREAD_REAPER_STACKSIZE KERNEL_CONF_STACKSIZE_MAIN
@@ -83,7 +85,7 @@ static int insert(pthread_thread_t *pt)
 {
     int result = -1;
     mutex_lock(&pthread_mutex);
-    for (int i = 0; i < MAXTHREADS; i++){
+    for (int i = 1; i < MAXTHREADS; i++){
         if (!pthread_sched_threads[i]) {
             pthread_sched_threads[i] = pt;
             result = i;
@@ -182,7 +184,8 @@ void pthread_exit(void *retval)
 }
 
 int pthread_join(pthread_t th, void **thread_return)
-{puts("join");
+{
+    puts("join me!");
     pthread_thread_t *other = pthread_sched_threads[th];
     if (!other) {
         return -1;
@@ -246,6 +249,7 @@ pthread_t pthread_self(void)
 
 int pthread_equal(pthread_t thread1, pthread_t thread2)
 {
+    printf("equal [%d == %d -> %d]\n", thread1, thread2, (thread1 == thread2));
     return (thread1 == thread2);
 }
 
@@ -263,6 +267,7 @@ int pthread_cancel(pthread_t th)
 
 int pthread_setcancelstate(int state, int *oldstate)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) state;
     (void) oldstate;
     return 0;
@@ -270,6 +275,7 @@ int pthread_setcancelstate(int state, int *oldstate)
 
 int pthread_setcanceltype(int type, int *oldtype)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) type;
     (void) oldtype;
     return 0;
@@ -285,6 +291,7 @@ void pthread_testcancel(void)
 
 int pthread_setschedparam(pthread_t target_thread, int policy, const struct sched_param *param)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) target_thread;
     (void) policy;
     (void) param;
@@ -293,6 +300,7 @@ int pthread_setschedparam(pthread_t target_thread, int policy, const struct sche
 
 int pthread_getschedparam(pthread_t target_thread, int *policy, struct sched_param *param)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) target_thread;
     (void) policy;
     (void) param;
@@ -301,6 +309,7 @@ int pthread_getschedparam(pthread_t target_thread, int *policy, struct sched_par
 
 int pthread_setschedprio(pthread_t target_thread, int prio)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) target_thread;
     (void) prio;
     return 0;
@@ -326,6 +335,7 @@ int pthread_attr_setaffinity_np (pthread_attr_t *__attr,
                     const cpu_set_t *__cpuset)
      __THROW __nonnull ((1, 3))
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     return 0;
 }
 
@@ -336,6 +346,7 @@ int pthread_attr_getaffinity_np (const pthread_attr_t *__attr,
                     cpu_set_t *__cpuset)
      __THROW __nonnull ((1, 3))
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     return 0;
 }
 
@@ -345,6 +356,7 @@ int pthread_setaffinity_np (pthread_t __th, size_t __cpusetsize,
                    const cpu_set_t *__cpuset)
      __THROW __nonnull ((3))
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     return 0;
 }
 
@@ -353,6 +365,7 @@ int pthread_getaffinity_np (pthread_t __th, size_t __cpusetsize,
                    cpu_set_t *__cpuset)
      __THROW __nonnull ((3))
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     return 0;
 }
 
@@ -360,11 +373,13 @@ int pthread_getaffinity_np (pthread_t __th, size_t __cpusetsize,
 
 void *pthread_getspecific(pthread_key_t key)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) key;
 }
 
 int pthread_setspecific(pthread_key_t key, const void *value)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) key;
     (void) value;
     return 0;
@@ -372,6 +387,7 @@ int pthread_setspecific(pthread_key_t key, const void *value)
 
 int pthread_key_create(pthread_key_t *key, void (*destructor)(void*))
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) key;
     (void) destructor;
     return 0;
@@ -379,6 +395,7 @@ int pthread_key_create(pthread_key_t *key, void (*destructor)(void*))
 
 int pthread_key_delete(pthread_key_t key)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) key;
     return 0;
 }

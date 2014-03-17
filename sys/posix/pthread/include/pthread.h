@@ -3,15 +3,16 @@
 
 #include <time.h>
 
-#include "kernel.h"
-#include "mutex.h"
-#include "sched.h"
-
-#include "pthreadtypes.h"
+#include "bits/pthreadtypes.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include "kernel.h"
+#include "mutex.h"
+#include "sched.h"
+
 
 /* Create a new thread, starting with execution of START-ROUTINE
  getting passed ARG.  Creation attributed come from ATTR.  The new

@@ -23,6 +23,8 @@
 #include "vtimer.h"
 #include "debug.h"
 
+#include <stdio.h>
+
 struct vtimer_t timer;
 
 int pthread_cond_condattr_destroy(struct pthread_condattr_t *attr)
@@ -45,6 +47,7 @@ int pthread_cond_condattr_init(struct pthread_condattr_t *attr)
 
 int pthread_condattr_getpshared(const pthread_condattr_t *attr, int *pshared)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void)attr;
     (void)pshared;
 
@@ -53,6 +56,7 @@ int pthread_condattr_getpshared(const pthread_condattr_t *attr, int *pshared)
 
 int pthread_condattr_setpshared(pthread_condattr_t *attr, int pshared)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void)attr;
     (void)pshared;
 
@@ -61,6 +65,7 @@ int pthread_condattr_setpshared(pthread_condattr_t *attr, int pshared)
 
 int pthread_condattr_getclock(const pthread_condattr_t *attr, clockid_t *clock_id)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void)attr;
     (void)clock_id;
 
@@ -69,6 +74,7 @@ int pthread_condattr_getclock(const pthread_condattr_t *attr, clockid_t *clock_i
 
 int pthread_condattr_setclock(pthread_condattr_t *attr, clockid_t clock_id)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void)attr;
     (void)clock_id;
 

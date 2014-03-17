@@ -16,9 +16,14 @@
    License along with the GNU C Library; if not, see
    <http://www.gnu.org/licenses/>.  */
 
+
 #if !defined _SIGNAL_H && !defined __need_siginfo_t \
     && !defined __need_sigevent_t
 # error "Never include this file directly.  Use <signal.h> instead"
+#endif
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 #include <stdint.h>
@@ -344,5 +349,9 @@ enum
   SIGEV_THREAD_ID = 4		/* Send signal to specific thread.  */
 #define SIGEV_THREAD_ID	SIGEV_THREAD_ID
 };
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif	/* have _SIGNAL_H.  */

@@ -200,5 +200,6 @@ void sched_task_exit(void)
 
 int sched_yield(void)
 {
-   return 0; 
+    thread_yield();
+    return 0;
 }
