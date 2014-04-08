@@ -16,6 +16,7 @@
  * @}
  */
 
+#include <stdio.h>
 #include <string.h>
 #include <stddef.h>
 
@@ -47,6 +48,7 @@ int pthread_mutex_lock(pthread_mutex_t *mutex)
 
 int pthread_mutex_timedlock(pthread_mutex_t *mutex, const struct timespec *abstime)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) mutex;
     (void) abstime;
     return -1; /* currently not supported */
@@ -61,6 +63,7 @@ int pthread_mutex_unlock(pthread_mutex_t *mutex)
 int pthread_mutex_getprioceiling(const pthread_mutex_t *mutex, int *prioceiling)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) mutex;
     (void) prioceiling;
     return 0;
@@ -69,6 +72,7 @@ int pthread_mutex_getprioceiling(const pthread_mutex_t *mutex, int *prioceiling)
 int pthread_mutex_setprioceiling(pthread_mutex_t *mutex, int prioceiling, int *old_ceiling)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) mutex;
     (void) prioceiling;
     (void) old_ceiling;
@@ -78,6 +82,7 @@ int pthread_mutex_setprioceiling(pthread_mutex_t *mutex, int prioceiling, int *o
 int pthread_mutexattr_init(pthread_mutexattr_t *attr)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     return 0;
 }
@@ -85,6 +90,7 @@ int pthread_mutexattr_init(pthread_mutexattr_t *attr)
 int pthread_mutexattr_destroy(pthread_mutexattr_t *attr)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     return 0;
 }
@@ -92,6 +98,7 @@ int pthread_mutexattr_destroy(pthread_mutexattr_t *attr)
 int pthread_mutexattr_getpshared(const pthread_mutexattr_t *attr, int *pshared)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) pshared;
     return 0;
@@ -100,6 +107,7 @@ int pthread_mutexattr_getpshared(const pthread_mutexattr_t *attr, int *pshared)
 int pthread_mutexattr_setpshared(pthread_mutexattr_t *attr, int pshared)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) pshared;
     return 0;
@@ -108,6 +116,7 @@ int pthread_mutexattr_setpshared(pthread_mutexattr_t *attr, int pshared)
 int pthread_mutexattr_gettype(const pthread_mutexattr_t *attr, int *kind)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) kind;
     return 0;
@@ -116,6 +125,7 @@ int pthread_mutexattr_gettype(const pthread_mutexattr_t *attr, int *kind)
 int pthread_mutexattr_settype(pthread_mutexattr_t *attr, int kind)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) kind;
     return 0;
@@ -124,6 +134,7 @@ int pthread_mutexattr_settype(pthread_mutexattr_t *attr, int kind)
 int pthread_mutexattr_getprotocol(const pthread_mutexattr_t *attr, int *protocol)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) protocol;
     return 0;
@@ -132,6 +143,7 @@ int pthread_mutexattr_getprotocol(const pthread_mutexattr_t *attr, int *protocol
 int pthread_mutexattr_setprotocol(pthread_mutexattr_t *attr, int protocol)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) protocol;
     return 0;
@@ -140,6 +152,7 @@ int pthread_mutexattr_setprotocol(pthread_mutexattr_t *attr, int protocol)
 int pthread_mutexattr_getprioceiling(const pthread_mutexattr_t *attr, int *prioceiling)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) prioceiling;
     return 0;
@@ -148,6 +161,7 @@ int pthread_mutexattr_getprioceiling(const pthread_mutexattr_t *attr, int *prioc
 int pthread_mutexattr_setprioceiling(pthread_mutexattr_t *attr, int prioceiling)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) prioceiling;
     return 0;
@@ -156,6 +170,7 @@ int pthread_mutexattr_setprioceiling(pthread_mutexattr_t *attr, int prioceiling)
 int pthread_mutexattr_getrobust(const pthread_mutexattr_t *attr, int *robustness)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) robustness;
     return 0;
@@ -164,6 +179,7 @@ int pthread_mutexattr_getrobust(const pthread_mutexattr_t *attr, int *robustness
 int pthread_mutexattr_setrobust(pthread_mutexattr_t *attr, int robustness)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) robustness;
     return 0;

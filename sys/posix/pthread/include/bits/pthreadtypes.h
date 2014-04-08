@@ -4,6 +4,10 @@
 #include <stdint.h>
 #include "mutex.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef unsigned long int pthread_t;
 
 /* Keys for thread-specific data */
@@ -38,5 +42,9 @@ typedef unsigned long int pthread_rwlock_t;
 typedef unsigned long int pthread_rwlockattr_t;
 
 typedef volatile int pthread_spinlock_t;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* PTHREADTYPES_H_ */

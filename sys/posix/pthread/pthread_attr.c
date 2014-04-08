@@ -17,6 +17,7 @@
  */
 
 #include <string.h>
+#include <stdio.h>
 
 #include "pthread.h"
 
@@ -55,6 +56,7 @@ int pthread_attr_setdetachstate(pthread_attr_t *attr, int detachstate)
 int pthread_attr_getguardsize(const pthread_attr_t *attr, size_t *guardsize)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) guardsize;
     return -1;
@@ -63,6 +65,7 @@ int pthread_attr_getguardsize(const pthread_attr_t *attr, size_t *guardsize)
 int pthread_attr_setguardsize(pthread_attr_t *attr, size_t guardsize)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) guardsize;
     return -1;
@@ -71,6 +74,7 @@ int pthread_attr_setguardsize(pthread_attr_t *attr, size_t guardsize)
 int pthread_attr_getschedparam(const pthread_attr_t *attr, struct sched_param *param)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) param;
     return -1;
@@ -79,6 +83,7 @@ int pthread_attr_getschedparam(const pthread_attr_t *attr, struct sched_param *p
 int pthread_attr_setschedparam(pthread_attr_t *attr, const struct sched_param *param)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) param;
     return -1;
@@ -87,6 +92,7 @@ int pthread_attr_setschedparam(pthread_attr_t *attr, const struct sched_param *p
 int pthread_attr_getschedpolicy(const pthread_attr_t *attr, int *policy)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) policy;
     return -1;
@@ -95,6 +101,7 @@ int pthread_attr_getschedpolicy(const pthread_attr_t *attr, int *policy)
 int pthread_attr_setschedpolicy(pthread_attr_t *attr, int policy)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) policy;
     return -1;
@@ -103,6 +110,7 @@ int pthread_attr_setschedpolicy(pthread_attr_t *attr, int policy)
 int pthread_attr_getinheritsched(const pthread_attr_t *attr, int *inherit)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) inherit;
     return -1;
@@ -111,6 +119,7 @@ int pthread_attr_getinheritsched(const pthread_attr_t *attr, int *inherit)
 int pthread_attr_setinheritsched(pthread_attr_t *attr, int inherit)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) inherit;
     return -1;
@@ -119,6 +128,7 @@ int pthread_attr_setinheritsched(pthread_attr_t *attr, int inherit)
 int pthread_attr_getscope(const pthread_attr_t *attr, int *scope)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) scope;
     return -1;
@@ -127,6 +137,7 @@ int pthread_attr_getscope(const pthread_attr_t *attr, int *scope)
 int pthread_attr_setscope(pthread_attr_t *attr, int scope)
 {
     // TODO
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     (void) attr;
     (void) scope;
     return -1;
@@ -134,24 +145,28 @@ int pthread_attr_setscope(pthread_attr_t *attr, int scope)
 
 int pthread_attr_getstackaddr(const pthread_attr_t *attr, void **stackaddr)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     *stackaddr = attr->ss_sp;
     return 0;
 }
 
 int pthread_attr_setstackaddr(pthread_attr_t *attr, void *stackaddr)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     attr->ss_sp = (char *) stackaddr;
     return 0;
 }
 
 int pthread_attr_getstacksize(const pthread_attr_t *attr, size_t *stacksize)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     *stacksize = attr->ss_size;
     return 0;
 }
 
 int pthread_attr_setstacksize(pthread_attr_t *attr, size_t stacksize)
 {
+    printf("%s:%d  %s", __FILE__, __LINE__,__PRETTY_FUNCTION__);
     attr->ss_size = stacksize;
     return 0;
 }
