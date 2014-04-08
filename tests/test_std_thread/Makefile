@@ -9,13 +9,15 @@ export RIOTBASE = $(CURDIR)/../..
 
 # switches for c++/c mixedmode
 export CPPMIX = 1
-export CPPMIXCC = g++ -g -static-libstdc++ -L/home/developer/Desktop/test/RIOT/tests/test_std_thread
+export CPPMIXCC = g++ -g 
 #export CPPMIXEXTRALIBS
 export CPPMIXCFLAGS = -std=c++11
 
 ## Modules to include.
 
 USEMODULE += posix
+USEMODULE += timex
+USEMODULE += vtimer
 USEMODULE += pthread
 
 ifeq ($(BOARD),native)

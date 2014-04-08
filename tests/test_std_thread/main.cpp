@@ -18,8 +18,10 @@
 #include <cstdio>
 #include <thread>
 #include <exception>
+extern "C" {
+//#include "thread.h"
 #include "pthread.h"
-
+};
 
 void foo()
 {
@@ -30,8 +32,8 @@ int main() {
 
    printf("Hello c++\n");
 
-  //void * ptr1 = (void *) &pthread_create;
-  void * ptr2 = (void *) &pthread_join;
+//  void * ptr1 = (void *) &pthread_create;
+  //void * ptr2 = (void *) &pthread_join;
 //printf("%p\n", ptr2);
 
     std::thread bar (foo);

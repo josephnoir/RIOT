@@ -83,7 +83,7 @@ static int insert(pthread_thread_t *pt)
 {
     int result = -1;
     mutex_lock(&pthread_mutex);
-    for (int i = 0; i < MAXTHREADS; i++){
+    for (int i = 1; i < MAXTHREADS; i++){
         if (!pthread_sched_threads[i]) {
             pthread_sched_threads[i] = pt;
             result = i;
@@ -182,7 +182,8 @@ void pthread_exit(void *retval)
 }
 
 int pthread_join(pthread_t th, void **thread_return)
-{puts("join");
+{
+    puts("join");
     pthread_thread_t *other = pthread_sched_threads[th];
     if (!other) {
         return -1;
