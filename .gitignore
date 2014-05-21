@@ -11,3 +11,5 @@ cachegrind.out*
 .project
 .cproject
 .settings
+
+.DS_Store
