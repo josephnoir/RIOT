@@ -88,7 +88,7 @@ int pthread_condattr_setpshared(pthread_condattr_t *attr, int pshared);
  * @param[out] clock_id the clock ID that is used to measure the timeout service
  * @return returns 0 on success, an errorcode otherwise.
  */
-int pthread_condattr_getclock(const pthread_condattr_t *attr, clockid_t *clock_id);
+int pthread_condattr_getclock(const pthread_condattr_t *attr, clock_t *clock_id);
 
 /**
  * @brief Set the clock selected for the conditon variable attribute ATTR.
@@ -97,7 +97,7 @@ int pthread_condattr_getclock(const pthread_condattr_t *attr, clockid_t *clock_i
  * @param[in] clock_id the clock ID that shall be used to measure the timeout service
  * @return returns 0 on success, an errorcode otherwise.
  */
-int pthread_condattr_setclock(pthread_condattr_t *attr, clockid_t clock_id);
+int pthread_condattr_setclock(pthread_condattr_t *attr, clock_t clock_id);
 
 /**
  * @brief Initializes a condition variable object
