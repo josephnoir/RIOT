@@ -67,7 +67,7 @@ ceil(std::chrono::duration<Rep, Period> duration) {
 
 template <class Predicate>
 void condition_variable::wait(unique_lock<mutex>& lock, Predicate pred) {
-  while(!pred) {
+  while(!pred()) {
     wait(lock);
   }
 }
