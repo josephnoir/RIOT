@@ -74,31 +74,31 @@ namespace this_thread {
   void sleep_for(const std::chrono::nanoseconds& ns);
   template <class Rep, class Period>
   void sleep_for(const std::chrono::duration<Rep, Period>& sleep_duration) {
-    // using namespace std::chrono;
-    // if (sleep_duration > duration<Rep,Period>::zero()) {
-    //   constexpr duration<long double> max = nanoseconds::max();
-    //   nanoseconds ns;
-    //   if (sleep_duration < max) {
-    //     ns = duration_cast<nanoseconds>(sleep_duration);
-    //     if (ns < sleep_duration) {
-    //       ++ns;
-    //     }
-    //   }
-    //   else {
-    //     ns = nanoseconds::max();
-    //   }
-    //   sleep_for(ns);
-    // }
+    using namespace std::chrono;
+    if (sleep_duration > duration<Rep,Period>::zero()) {
+      constexpr duration<long double> max = nanoseconds::max();
+      nanoseconds ns;
+      if (sleep_duration < max) {
+        ns = duration_cast<nanoseconds>(sleep_duration);
+        if (ns < sleep_duration) {
+          ++ns;
+        }
+      }
+      else {
+        ns = nanoseconds::max();
+      }
+      sleep_for(ns);
+    }
   }
   template <class Clock, class Period>
   void sleep_until(const std::chrono::time_point<Clock, Period>& sleep_time) {
-    // using namespace std::chrono;
-    // std::mutex mtx;
-    // std::condition_variable cv;
-    // unique_lock<mutex> lk(mtx);
-    // while(Clock::now() < sleep_time) {
-    //   cv.wait_until(lk,sleep_time);
-    // }
+    using namespace std::chrono;
+    mutex mtx;
+    condition_variable cv;
+    unique_lock<mutex> lk(mtx);
+    while(Clock::now() < sleep_time) {
+      cv.wait_until(lk,sleep_time);
+    }
   }
   template <class Period>
   inline void
