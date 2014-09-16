@@ -28,9 +28,6 @@ namespace {
   constexpr kernel_pid_t thread_uninitialized = -1;
 }
 
-// class thread;
-// class thread_id;
-
 class thread_id {
   template<class CharT,class Traits>
   friend std::basic_ostream<CharT,Traits>&
@@ -149,29 +146,6 @@ class thread {
 };
 
 void swap(thread& lhs, thread& rhs) noexcept;
-
-/*
-template<class T>
-class thread_storage_ptr { };
-
-class sub_state;
-class thread_struct_impl;
-
-class thread_struct {
- public:
-  thread_struct();
-  ~thread_struct();
-
-  // void notify_add_on_exit(condition_variable*,mutex*);
-  // void make_ready_at_thread_exit(sub_state*);
-
- private:
-  thread_struct_impl* impl;
-
-  thread_struct(const thread_struct&);
-  thread_struct& operator =(const thread_struct&);
-};
-*/
 
 template <class F>
 void* thread_proxy(void* vp) {
