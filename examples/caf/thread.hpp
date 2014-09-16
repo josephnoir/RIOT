@@ -29,9 +29,9 @@ namespace {
 }
 
 class thread_id {
-  template<class CharT,class Traits>
-  friend std::basic_ostream<CharT,Traits>&
-    operator<<(std::basic_ostream<CharT,Traits>& out, thread_id id);
+  template<class T,class Traits>
+  friend std::basic_ostream<T,Traits>&
+    operator<<(std::basic_ostream<T,Traits>& out, thread_id id);
   friend class thread;
 
  public:
@@ -61,9 +61,9 @@ class thread_id {
   kernel_pid_t m_handle;
 };
 
-template<class CharT,class Traits>
-inline std::basic_ostream<CharT,Traits>&
-  operator<<(std::basic_ostream<CharT,Traits>& out, thread_id id) {
+template<class T,class Traits>
+inline std::basic_ostream<T,Traits>&
+  operator<<(std::basic_ostream<T,Traits>& out, thread_id id) {
   return out << id.m_handle;
 }
 
