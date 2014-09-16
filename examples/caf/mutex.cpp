@@ -1,10 +1,3 @@
-//
-//  mutex.cpp
-//  
-//
-//  Created by Joseph Noir on 12/09/14.
-//
-//
 
 #include "mutex.hpp"
 
