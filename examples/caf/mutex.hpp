@@ -5,8 +5,9 @@
 #include <utility>
 #include <system_error>
 
+extern "C" {
 #include "mutex.h"
-//#include ""
+}
 
 namespace caf {
 

@@ -22,14 +22,14 @@ extern "C" {
 #include "caf/detail/int_list.hpp"
 #include "caf/detail/apply_args.hpp"
 
-class thread;
-class thread_id;
-
 namespace caf {
 
 namespace {
   constexpr kernel_pid_t thread_uninitialized = -1;
 }
+
+// class thread;
+// class thread_id;
 
 class thread_id {
   template<class CharT,class Traits>

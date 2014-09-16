@@ -1,8 +1,11 @@
 
 #include <system_error>
 
+extern "C" {
 #include "irq.h"
 #include "sched.h"
+}
+
 #include "condition_variable.hpp"
 
 using namespace std::chrono;
