@@ -62,7 +62,7 @@ int pthread_condattr_setpshared(pthread_condattr_t *attr, int pshared)
     return 0;
 }
 
-int pthread_condattr_getclock(const pthread_condattr_t *attr, clock_t *clock_id)
+int pthread_condattr_getclock(const pthread_condattr_t *attr, clockid_t *clock_id)
 {
     (void)attr;
     (void)clock_id;
@@ -70,7 +70,7 @@ int pthread_condattr_getclock(const pthread_condattr_t *attr, clock_t *clock_id)
     return 0;
 }
 
-int pthread_condattr_setclock(pthread_condattr_t *attr, clock_t clock_id)
+int pthread_condattr_setclock(pthread_condattr_t *attr, clockid_t clock_id)
 {
     (void)attr;
     (void)clock_id;
