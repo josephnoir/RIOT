@@ -361,8 +361,9 @@ void errx(int eval, const char *fmt, ...)
 
 int getpid(void)
 {
-    warnx("not implemented");
-    return -1;
+    // warnx("not implemented");
+    // return -1;
+    return 0;
 }
 
 #ifdef MODULE_VTIMER
