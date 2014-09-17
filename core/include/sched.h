@@ -128,6 +128,15 @@ void sched_set_status(tcb_t *process, unsigned int status);
  */
 void sched_switch(uint16_t other_prio);
 
+#define __CPU_SETSIZE 1024
+#define __NCPUBITS (8* sizeof(__cpu_mask))
+typedef unsigned long int __cpu_mask;
+typedef struct {
+    __cpu_mask __bits[__CPU_SETSIZE / __NCPUBITS];
+} cpu_set_t;
+
+inline int sched_yield(void) { ; } // no op
+
 /**
  * @brief   Call context switching at thread exit
  */
