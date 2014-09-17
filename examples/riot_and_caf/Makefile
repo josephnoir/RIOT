@@ -25,7 +25,7 @@ RIOTBASE ?= $(CURDIR)/../..
 CFLAGS += -DDEVELHELP -Wno-deprecated
 
 # Change this to 0 show compiler invocation lines by default:
-QUIET ?= 1 
+QUIET ?= 1
 
 # If you want to add some extra flags when compile c++ files, add these flags
 # to CXXEXFLAGS variable
