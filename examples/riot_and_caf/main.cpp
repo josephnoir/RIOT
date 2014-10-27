@@ -34,6 +34,31 @@ behavior fluffy(event_based_actor* self) {
   };
 }
 
+/*
+class fluffy : public event_based_actor {
+ public:
+  fluffy() {
+    printf("it's fluffy!\n");
+  }
+
+  behavior make_behavior() override {
+    return {
+      on(atom("poke"), arg_match) >> [=](const actor& other) {
+        printf("quiek!\n");
+        send(other, atom("blub"));
+        //return atom("blub");
+      }
+    };
+  }
+};
+*/
+
+/*
+void sender(event_based_actor* self, const actor& other) {
+  self->send(other, atom("blub"));
+}
+*/
+
 int main() {
   printf("\n************ RIOT and CAF demo ***********\n");
   auto f = spawn<detached>(fluffy);
