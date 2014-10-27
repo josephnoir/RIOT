@@ -20,7 +20,7 @@
 
 using namespace std;
 using namespace caf;
-
+/*
 behavior button(event_based_actor* self, const string& identifier) {
   return {
     on(atom("press")) >> [=] {
@@ -46,15 +46,41 @@ behavior fool(event_based_actor* self, const string& identifier) {
     }
   };
 }
+*/
 
-/* main */
+behavior fluffy() {
+  return {
+    on(atom("poke")) >> [] {
+      printf("quiek!\n");
+    }
+  };
+}
+
 int main() {
   printf("\n************ RIOT and CAF demo ***********\n");
+  auto f = spawn(fluffy);
+  {   
+    scoped_actor self;
+    self->send(f, atom("poke"));
+    // self->send(f, atom("quit"));
+  }
+
+/*
   auto bttn = spawn<detached>(button, "The Button");
   auto dude = spawn<detached>(fool, "The Fool");
-  
   anon_send(dude, atom("find"), bttn);
-
+*/
+/*
+  {
+    scoped_actor self;
+    self->send(self, atom("blub"));
+    self->receive(
+      others() >> [] {
+        printf("blubb\n");
+      }
+    );
+  }
+*/
   await_all_actors_done();
   shutdown();
 
