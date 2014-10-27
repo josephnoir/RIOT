@@ -80,6 +80,12 @@
 #ifndef _SCHEDULER_H
 #define _SCHEDULER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "stdio.h"
+
 #include <stddef.h>
 #include "bitarithm.h"
 #include "tcb.h"
@@ -135,7 +141,7 @@ typedef struct {
     __cpu_mask __bits[__CPU_SETSIZE / __NCPUBITS];
 } cpu_set_t;
 
-inline int sched_yield(void) { ; } // no op
+inline int sched_yield(void) { puts("sched_yield called\n"); } // needs implementation 
 
 /**
  * @brief   Call context switching at thread exit
