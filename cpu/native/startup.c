@@ -371,5 +371,22 @@ __attribute__((constructor)) static void startup(int argc, char **argv)
     board_init();
 
     puts("RIOT native hardware initialization complete.\n");
+
+    /* manually call other contructors in __init_array which haven't been called */
+    typedef void (*func_ptr)(void);
+    extern func_ptr __init_array_start[];
+    extern func_ptr __init_array_end[];
+    int size = __init_array_end - __init_array_start;
+    int i, flag = 0;
+    for (i = 0; i < size; i++) { 
+        if (__init_array_start[i] == startup) {
+            flag = 1;
+            continue;
+        }
+        if (flag == 1){
+            (__init_array_start[i])();
+        }
+    }
+
     kernel_init();
 }
