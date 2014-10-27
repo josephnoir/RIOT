@@ -48,22 +48,57 @@ behavior fool(event_based_actor* self, const string& identifier) {
 }
 */
 
-behavior fluffy() {
+behavior fluffy(event_based_actor* self) {
+  printf("blaaaa\n");
   return {
-    on(atom("poke")) >> [] {
+    on(atom("poke"), arg_match) >> [=](const actor& other) {
       printf("quiek!\n");
+      self->send(other, atom("blub"));
     }
   };
 }
 
+/*
+class fluffy : public event_based_actor {
+ public:
+  fluffy() {
+    printf("it's fluffy!\n");
+  }
+
+  behavior make_behavior() override {
+    return {
+      on(atom("poke"), arg_match) >> [=](const actor& other) {
+        printf("quiek!\n");
+        send(other, atom("blub"));
+        //return atom("blub");
+      }
+    };
+  }
+};
+*/
+
+/*
+void sender(event_based_actor* self, const actor& other) {
+  self->send(other, atom("blub"));
+}
+*/
+
 int main() {
   printf("\n************ RIOT and CAF demo ***********\n");
-  auto f = spawn(fluffy);
+
+  auto f = spawn<detached>(fluffy);
+  //auto f = spawn<fluffy,detached>();
   {   
     scoped_actor self;
-    self->send(f, atom("poke"));
+    self->send(f, atom("poke"), self);
     // self->send(f, atom("quit"));
+    self->receive(
+      others() >> [] {
+        printf("blubb\n");
+      }
+    );
   }
+
 
 /*
   auto bttn = spawn<detached>(button, "The Button");
@@ -73,7 +108,8 @@ int main() {
 /*
   {
     scoped_actor self;
-    self->send(self, atom("blub"));
+    //self->send(self, atom("blub"));
+    spawn(sender, self);
     self->receive(
       others() >> [] {
         printf("blubb\n");
