@@ -1,4 +1,3 @@
-
 /*
 * Copyright (C) 2014 Hamburg University of Applied Sciences (HAW)
 *
