@@ -1,23 +1,22 @@
 
 #include <time.h>
 
+#include <cerrno>
+
 #include "thread.hpp"
 
 namespace caf {
 
 thread::~thread() {
   // not needed, as our thread is always detachted
-  // if (m_handle != thread_uninitialized) {
-  //   std::terminate();
-  // }
 }
 
 void thread::join() {
-  // todo: delete this, once the CAF is adjusted accordingly
+  // you can't join threads
 }
 
-void detach() {
-  // todo: does RIOT require this?
+void thread::detach() {
+  // I believe there is no equivalent on RIOT
 }
 
 unsigned thread::hardware_concurrency() noexcept {
