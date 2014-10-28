@@ -1,9 +1,32 @@
+/******************************************************************************
+ *                       ____    _    _____                                   *
+ *                      / ___|  / \  |  ___|    C++                           *
+ *                     | |     / _ \ | |_       Actor                         *
+ *                     | |___ / ___ \|  _|      Framework                     *
+ *                      \____/_/   \_|_|                                      *
+ *                                                                            *
+ * Copyright (C) 2011 - 2014                                                  *
+ * Dominik Charousset <dominik.charousset (at) haw-hamburg.de>                *
+ *                                                                            *
+ * Distributed under the terms and conditions of the BSD 3-Clause License or  *
+ * (at your option) under the terms and conditions of the Boost Software      *
+ * License 1.0. See accompanying files LICENSE and LICENCE_ALTERNATIVE.       *
+ *                                                                            *
+ * If you did not receive a copy of the license files, see                    *
+ * http://opensource.org/licenses/BSD-3-Clause and                            *
+ * http://www.boost.org/LICENSE_1_0.txt.                                      *
+ ******************************************************************************/
 
-#ifndef MUTEX_HPP
-#define MUTEX_HPP
+#ifndef CAF_MUTEX_HPP
+#define CAF_MUTEX_HPP
+
+#ifdef __RIOTBUILD_FLAG
 
 #include <utility>
-#include <system_error>
+//#include <system_error>
+#include <stdexcept>
+
+#include <cstdio>
 
 extern "C" {
 #include "mutex.h"
@@ -46,7 +69,7 @@ class lock_guard {
  public:
   using mutex_type = Mutex;
 
-  inline explicit lock_guard(mutex_type& mtx) : m_mtx(mtx) { m_mtx.lock(); }
+  inline explicit lock_guard(mutex_type& mtx) : m_mtx{mtx} { m_mtx.lock(); }
   inline lock_guard(mutex_type& mtx, adopt_lock_t) : m_mtx{mtx} {}
   inline ~lock_guard() { m_mtx.unlock(); }
 
@@ -138,10 +161,10 @@ class unique_lock {
 template<class Mutex>
 void unique_lock<Mutex>::lock() {
   if (m_mtx == nullptr) {
-    //std::__throw_system_error(EPERM, "unique_lock::lock: references null mutex");
+    throw std::runtime_error("unique_lock::lock: references null mutex");
   }
   if (m_owns) {
-//    std::__throw_system_error(EDEADLK, "unique_lock::lock: already locked");
+    throw std::runtime_error("");
   }
   m_mtx->lock();
   m_owns = true;
@@ -150,11 +173,10 @@ void unique_lock<Mutex>::lock() {
 template<class Mutex>
 bool unique_lock<Mutex>::try_lock() {
   if (m_mtx == nullptr) {
-//    std::__throw_system_error(EPERM,
-//                              "unique_lock::try_lock: references null mutex");
+    throw std::runtime_error("unique_lock::try_lock: references null mutex");
   }
   if (m_owns) {
-//    std::__throw_system_error(EDEADLK, "unique_lock::try_lock: already locked");
+    throw std::runtime_error("unique_lock::try_lock lock: already locked");
   }
   m_owns = m_mtx->try_lock();
   return m_owns;
@@ -165,12 +187,10 @@ bool unique_lock<Mutex>::try_lock() {
 //bool unique_lock<Mutex>
 //  ::try_lock_for(const std::chrono::duration<Rep,Period>& timeout_duration) {
 //  if (m_mtx == nullptr) {
-//    std::__throw_system_error(EPERM, "unique_lock::try_lock_for:"
-//                                     " references null mutex");
+//    throw std::runtime_error("unique_lock::try_lock_for: references null mutex");
 //  }
 //  if (m_owns) {
-//    std::__throw_system_error(EDEADLK,
-//                              "unique_lock::try_lock_for: already locked");
+//    throw std::runtime_error("unique_lock::try_lock_for: already locked");
 //  }
 //  m_owns = m_mtx->try_lock_until(timeout_duration);
 //  return m_owns;
@@ -181,10 +201,10 @@ bool unique_lock<Mutex>::try_lock() {
 //bool unique_lock<Mutex>
 //  ::try_lock_until(const chrono::time_point<Clock, Duration>& timeout_time) {
 //    if (m_mtx == nullptr)
-//        __throw_system_error(EPERM, "unique_lock::try_lock_until: "
+//        throw std::runtime_error("unique_lock::try_lock_until: "
 //                                    "references null mutex");
 //    if (m_owns)
-//        __throw_system_error(EDEADLK, "unique_lock::try_lock_until: "
+//        throw std::runtime_error("unique_lock::try_lock_until: "
 //                                      "already locked");
 //    m_owns = m_mtx->try_lock_until(timeout_time);
 //    return m_owns;
@@ -193,7 +213,7 @@ bool unique_lock<Mutex>::try_lock() {
 template<class Mutex>
 void unique_lock<Mutex>::unlock() {
   if (!m_owns) {
-//    std::__throw_system_error(EPERM, "unique_lock::unlock: not locked");
+    throw std::runtime_error("unique_lock::unlock: not locked");
   }
   m_mtx->unlock();
   m_owns = false;
@@ -206,4 +226,18 @@ inline void swap(unique_lock<Mutex>& lhs, unique_lock<Mutex>& rhs) noexcept {
 
 } // namespace caf
 
-#endif // MUTEX_HPP
+#else
+
+#include <mutex>
+
+namespace caf {
+
+using mutex = std::mutex;
+template <class Mutex> using lock_guard = std::lock_guard<Mutex>;
+template <class Mutex> using unique_lock = std::unique_lock<Mutex>;
+
+} // namespace caf
+
+#endif
+
+#endif // CAF_MUTEX_HPP
