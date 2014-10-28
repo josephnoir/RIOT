@@ -1,18 +1,39 @@
+/******************************************************************************
+ *                       ____    _    _____                                   *
+ *                      / ___|  / \  |  ___|    C++                           *
+ *                     | |     / _ \ | |_       Actor                         *
+ *                     | |___ / ___ \|  _|      Framework                     *
+ *                      \____/_/   \_|_|                                      *
+ *                                                                            *
+ * Copyright (C) 2011 - 2014                                                  *
+ * Dominik Charousset <dominik.charousset (at) haw-hamburg.de>                *
+ *                                                                            *
+ * Distributed under the terms and conditions of the BSD 3-Clause License or  *
+ * (at your option) under the terms and conditions of the Boost Software      *
+ * License 1.0. See accompanying files LICENSE and LICENCE_ALTERNATIVE.       *
+ *                                                                            *
+ * If you did not receive a copy of the license files, see                    *
+ * http://opensource.org/licenses/BSD-3-Clause and                            *
+ * http://www.boost.org/LICENSE_1_0.txt.                                      *
+ ******************************************************************************/
 
+#ifndef CAF_THREAD_HPP
+#define CAF_THREAD_HPP
 
-#ifndef THREAD_HPP
-#define THREAD_HPP
+#ifdef __RIOTBUILD_FLAG
 
 #include <tuple>
 #include <chrono>
+#include <memory>
 #include <utility>
 #include <exception>
 #include <functional>
 #include <type_traits>
-#include <system_error>
-#include <memory>
+//#include <system_error>
+#include <stdexcept>
 
 extern "C" {
+#include <time.h>
 #include "thread.h"
 }
 
@@ -30,13 +51,13 @@ namespace {
 }
 
 class thread_id {
-  template<class T,class Traits>
+  template <class T,class Traits>
   friend std::basic_ostream<T,Traits>&
     operator<<(std::basic_ostream<T,Traits>& out, thread_id id);
   friend class thread;
 
  public:
-  inline thread_id() noexcept : m_handle{thread_uninitialized} { };
+  inline thread_id() noexcept : m_handle{thread_uninitialized} { }
   inline thread_id(kernel_pid_t handle) : m_handle{handle} {}
 
   inline bool operator==(thread_id other) noexcept {
@@ -62,7 +83,7 @@ class thread_id {
   kernel_pid_t m_handle;
 };
 
-template<class T,class Traits>
+template <class T,class Traits>
 inline std::basic_ostream<T,Traits>&
   operator<<(std::basic_ostream<T,Traits>& out, thread_id id) {
   return out << id.m_handle;
@@ -76,8 +97,8 @@ namespace this_thread {
   template <class Rep, class Period>
   void sleep_for(const std::chrono::duration<Rep, Period>& sleep_duration) {
     using namespace std::chrono;
-    if (sleep_duration > duration<Rep,Period>::zero()) {
-      constexpr duration<long double> max = nanoseconds::max();
+    if (sleep_duration > std::chrono::duration<Rep, Period>::zero()) {
+      constexpr std::chrono::duration<long double> max = nanoseconds::max();
       nanoseconds ns;
       if (sleep_duration < max) {
         ns = duration_cast<nanoseconds>(sleep_duration);
@@ -102,11 +123,9 @@ namespace this_thread {
     }
   }
   template <class Period>
-  inline void
-  sleep_until(const std::chrono::time_point<std::chrono::steady_clock,
-                                            Period>& sleep_time) {
-      using namespace std::chrono;
-      sleep_for(sleep_time - steady_clock::now());
+  inline void sleep_until(const std::chrono::time_point<std::chrono::steady_clock,
+                                                        Period>& sleep_time) {
+      sleep_for(sleep_time - std::chrono::steady_clock::now());
   }
 } // namespace this_thread
 
@@ -116,7 +135,7 @@ class thread {
   using id = thread_id;
   using native_handle_type = kernel_pid_t;
 
-  inline thread() noexcept : m_handle{thread_uninitialized} { };
+  inline thread() noexcept : m_handle{thread_uninitialized} { }
   template <class F, class ...Args,
             class = typename std::enable_if<
               !std::is_same<typename std::decay<F>::type,thread>::value
@@ -173,8 +192,7 @@ thread::thread(F&& f, Args&&... args) {
  if (m_handle >= 0) {
    p.release();
  } else {
-//   std::__throw_system_error(static_cast<int>(m_handle),
-//                             "Failed to create thread.");
+   throw std::runtime_error("Failed to create thread.");
  }
 }
 
@@ -193,4 +211,51 @@ inline void swap (thread& lhs, thread& rhs) noexcept {
 
 } // namespace caf
 
+#else
+
+#include <time.h>
+
+#include <thread>
+
+namespace caf {
+
+using thread = std::thread;
+
+namespace this_thread {
+
+using std::this_thread::get_id;
+
+// GCC hack
+#if !defined(_GLIBCXX_USE_SCHED_YIELD) && !defined(__clang__)
+inline void yield() noexcept {
+  timespec req;
+  req.tv_sec = 0;
+  req.tv_nsec = 1;
+  nanosleep(&req, nullptr);
+}
+#else
+using std::this_thread::yield;
 #endif
+
+// another GCC hack
+#if !defined(_GLIBCXX_USE_NANOSLEEP) && !defined(__clang__)
+template <class Rep, typename Period>
+inline void sleep_for(const chrono::duration<Rep, Period>& rt) {
+  auto sec = chrono::duration_cast<chrono::seconds>(rt);
+  auto nsec = chrono::duration_cast<chrono::nanoseconds>(rt - sec);
+  timespec req;
+  req.tv_sec = sec.count();
+  req.tv_nsec = nsec.count();
+  nanosleep(&req, nullptr);
+}
+#else
+using std::this_thread::sleep_for;
+#endif
+
+} // namespace this_thread
+
+} // namespace caf
+
+#endif
+
+#endif // CAF_THREAD_HPP
