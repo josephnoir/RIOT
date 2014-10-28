@@ -49,7 +49,7 @@ BOARD_BLACKLIST := arduino-due avsextrem chronos mbed_lpc1768 msb-430h msba2 red
 
 # If you want to add some extra flags when compile c++ files, add these flags
 # to CXXEXFLAGS variable
-CXXEXFLAGS += --std=c++11 -g -O0 -D__RIOTBUILD_FLAG -DCAF_NO_MEM_MANAGEMENT
+CXXEXFLAGS += --std=c++11 -g -O3 -D__RIOTBUILD_FLAG -DCAF_NO_MEM_MANAGEMENT
 
 CAF_HOME = /Users/noir/Git/actor-framework/
 

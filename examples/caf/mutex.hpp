@@ -15,20 +15,20 @@ class mutex {
 
  public:
   using native_handle_type = mutex_t*;
-  
+
   inline constexpr mutex() noexcept : m_mtx{0, PRIORITY_QUEUE_INIT} { }
   ~mutex();
-  
+
   void lock();
   bool try_lock() noexcept;
   void unlock() noexcept;
-  
+
   inline native_handle_type native_handle() { return &m_mtx; }
- 
+
  private:
   mutex(const mutex&);
   mutex& operator=(const mutex&);
-  
+
   mutex_t m_mtx;
 };
 
@@ -45,11 +45,11 @@ class lock_guard {
 
  public:
   using mutex_type = Mutex;
-  
-  inline explicit lock_guard(mutex_type& mtx) : m_mtx{mtx} { m_mtx.lock(); }
+
+  inline explicit lock_guard(mutex_type& mtx) : m_mtx(mtx) { m_mtx.lock(); }
   inline lock_guard(mutex_type& mtx, adopt_lock_t) : m_mtx{mtx} {}
   inline ~lock_guard() { m_mtx.unlock(); }
-  
+
  private:
   mutex_type& m_mtx;
 };
@@ -59,7 +59,7 @@ class unique_lock {
 
  public:
   using mutex_type = Mutex;
-  
+
   inline unique_lock() noexcept : m_mtx{nullptr}, m_owns{false} {}
   inline explicit unique_lock(mutex_type& mtx) : m_mtx{&mtx}, m_owns{true} {
     m_mtx->lock();
@@ -76,7 +76,7 @@ class unique_lock {
 //                                                   Duration>& timeout_time)
 //    : m_mtx{&mtx}, m_owns{mtx.try_lock_until(timeout_time)} { }
 //  template<class Rep, class Period>
-//  inline unique_lock(mutex_type& mtx, 
+//  inline unique_lock(mutex_type& mtx,
 //                     const chrono::duration<Rep,Period>& timeout_duration)
 //    : m_mtx{&mtx}, m_owns{mtx.try_lock_for(timeout_duration)} { }
 //  inline ~unique_lock() {
@@ -100,37 +100,37 @@ class unique_lock {
     lock.m_owns = false;
     return *this;
   }
-  
+
   void lock();
   bool try_lock();
-  
+
 //  template <class Rep, class Period>
 //    bool try_lock_for(const chrono::duration<Rep, Period>& timeout_duration);
 //  template <class Clock, class Duration>
 //    bool try_lock_until(const chrono::time_point<Clock,Duration>& timeout_time);
-  
+
   void unlock();
-  
+
   inline void swap(unique_lock& lock) noexcept {
     std::swap(m_mtx, lock.m_mtx);
     std::swap(m_owns, lock.m_owns);
   }
-  
+
   inline mutex_type* release() noexcept {
     mutex_type* mtx = m_mtx;
     m_mtx = nullptr;
     m_owns = false;
     return mtx;
   }
-  
+
   inline bool owns_lock() const noexcept { return m_owns; }
   inline explicit operator bool () const noexcept { return m_owns; }
   inline mutex_type* mutex() const noexcept { return m_mtx; }
-  
+
  private:
   unique_lock(unique_lock const&);
   unique_lock& operator=(unique_lock const&);
- 
+
   mutex_type* m_mtx;
   bool m_owns;
 };
@@ -138,10 +138,10 @@ class unique_lock {
 template<class Mutex>
 void unique_lock<Mutex>::lock() {
   if (m_mtx == nullptr) {
-    std::__throw_system_error(EPERM, "unique_lock::lock: references null mutex");
+    //std::__throw_system_error(EPERM, "unique_lock::lock: references null mutex");
   }
   if (m_owns) {
-    std::__throw_system_error(EDEADLK, "unique_lock::lock: already locked");
+//    std::__throw_system_error(EDEADLK, "unique_lock::lock: already locked");
   }
   m_mtx->lock();
   m_owns = true;
@@ -150,11 +150,11 @@ void unique_lock<Mutex>::lock() {
 template<class Mutex>
 bool unique_lock<Mutex>::try_lock() {
   if (m_mtx == nullptr) {
-    std::__throw_system_error(EPERM, 
-                              "unique_lock::try_lock: references null mutex");
+//    std::__throw_system_error(EPERM,
+//                              "unique_lock::try_lock: references null mutex");
   }
   if (m_owns) {
-    std::__throw_system_error(EDEADLK, "unique_lock::try_lock: already locked");
+//    std::__throw_system_error(EDEADLK, "unique_lock::try_lock: already locked");
   }
   m_owns = m_mtx->try_lock();
   return m_owns;
@@ -193,7 +193,7 @@ bool unique_lock<Mutex>::try_lock() {
 template<class Mutex>
 void unique_lock<Mutex>::unlock() {
   if (!m_owns) {
-    std::__throw_system_error(EPERM, "unique_lock::unlock: not locked");
+//    std::__throw_system_error(EPERM, "unique_lock::unlock: not locked");
   }
   m_mtx->unlock();
   m_owns = false;
