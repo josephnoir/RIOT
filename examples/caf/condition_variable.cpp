@@ -13,7 +13,7 @@ using namespace std::chrono;
 namespace caf {
 
 condition_variable::~condition_variable() {
-  m_queue.first = NULL;   
+  m_queue.first = NULL;
 }
 
 void condition_variable::notify_one() noexcept {
@@ -60,8 +60,8 @@ void condition_variable::notify_all() noexcept {
 
 void condition_variable::wait(unique_lock<mutex>& lock) noexcept {
   if (!lock.owns_lock()) {
-    std::__throw_system_error(EPERM,
-                              "condition_variable::wait: mutex not locked");
+//    std::__throw_system_error(EPERM,
+//                              "condition_variable::wait: mutex not locked");
   }
   priority_queue_node_t n;
   n.priority = sched_active_thread->priority;
@@ -83,7 +83,7 @@ void condition_variable::wait(unique_lock<mutex>& lock) noexcept {
   mutex_lock(lock.mutex()->native_handle());
 }
 
-// void condition_variable::__do_timed_wait(unique_lock<mutex>& lock, 
+// void condition_variable::__do_timed_wait(unique_lock<mutex>& lock,
 //                                          time_point<system_clock,
 //                                                     nanoseconds> tp) noexcept {
 //   if (!lock.owns_lock()) {

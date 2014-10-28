@@ -10,6 +10,7 @@
 #include <functional>
 #include <type_traits>
 #include <system_error>
+#include <memory>
 
 extern "C" {
 #include "thread.h"
@@ -48,13 +49,13 @@ class thread_id {
     return m_handle < other.m_handle;
   }
   inline bool operator<=(thread_id other) noexcept {
-    return !(m_handle > other.m_handle);  
+    return !(m_handle > other.m_handle);
   }
   inline bool operator> (thread_id other) noexcept {
     return m_handle > other.m_handle;
   }
   inline bool operator>=(thread_id other) noexcept {
-    return !(m_handle < other.m_handle);  
+    return !(m_handle < other.m_handle);
   }
 
  private:
@@ -69,8 +70,8 @@ inline std::basic_ostream<T,Traits>&
 
 namespace this_thread {
 
-  inline thread_id get_id() noexcept { return thread_getpid(); };
-  inline void yield() noexcept { thread_yield(); }; 
+  inline thread_id get_id() noexcept { return thread_getpid(); }
+  inline void yield() noexcept { thread_yield(); }
   void sleep_for(const std::chrono::nanoseconds& ns);
   template <class Rep, class Period>
   void sleep_for(const std::chrono::duration<Rep, Period>& sleep_duration) {
@@ -150,7 +151,7 @@ void swap(thread& lhs, thread& rhs) noexcept;
 template <class F>
 void* thread_proxy(void* vp) {
   std::unique_ptr<F> p(static_cast<F*>(vp));
-  auto indices = 
+  auto indices =
     detail::get_right_indices<caf::detail::tl_size<F>::value - 1>(*p);
   detail::apply_args(std::get<0>(*p), indices, *p);
   return nullptr;
@@ -165,15 +166,15 @@ thread::thread(F&& f, Args&&... args) {
                              typename decay<Args>::type...>;
  std::unique_ptr<func_and_args> p(new func_and_args(decay_copy(forward<F>(f)),
                                     decay_copy(forward<Args>(args))...));
- m_handle = thread_create(m_stack, sizeof(m_stack), 
+ m_handle = thread_create(m_stack, sizeof(m_stack),
                           PRIORITY_MAIN - 1, 0, // CREATE_WOUT_YIELD
                           &thread_proxy<func_and_args>,
                           p.get(), "caf_thread");
  if (m_handle >= 0) {
    p.release();
  } else {
-   std::__throw_system_error(static_cast<int>(m_handle),
-                             "Failed to create thread.");
+//   std::__throw_system_error(static_cast<int>(m_handle),
+//                             "Failed to create thread.");
  }
 }
 

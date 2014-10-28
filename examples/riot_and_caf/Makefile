@@ -49,14 +49,14 @@ BOARD_BLACKLIST := arduino-due avsextrem chronos mbed_lpc1768 msb-430h msba2 red
 
 # If you want to add some extra flags when compile c++ files, add these flags
 # to CXXEXFLAGS variable
-CXXEXFLAGS += --std=c++11 -g -O0 -D__RIOTBUILD_FLAG -DCAF_NO_MEM_MANAGEMENT
+CXXEXFLAGS += --std=c++11 -g -O3 -D__RIOTBUILD_FLAG -DCAF_NO_MEM_MANAGEMENT
 
-INCLUDES += -I/home/noir/actor-framework/libcaf_core/
-INCLUDES += -I/home/noir/actor-framework/libcaf_io/
+INCLUDES += -I/home/user01/Schreibtisch/actor-framework/libcaf_core/
+INCLUDES += -I/home/user01/Schreibtisch/actor-framework/libcaf_io/
 
 CXXEXTRALIBS += -Wl,--whole-archive
-CXXEXTRALIBS += /home/noir/actor-framework/build/lib/libcaf_core_static.a
-CXXEXTRALIBS += /home/noir/actor-framework/build/lib/libcaf_io_static.a
+CXXEXTRALIBS += /home/user01/Schreibtisch/actor-framework/build/lib/libcaf_core_static.a
+CXXEXTRALIBS += /home/user01/Schreibtisch/actor-framework/build/lib/libcaf_io_static.a
 CXXEXTRALIBS += -Wl,--no-whole-archive
 
 USEMODULE += vtimer
