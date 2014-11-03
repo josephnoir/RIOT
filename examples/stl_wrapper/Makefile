@@ -49,7 +49,7 @@ BOARD_BLACKLIST := arduino-due avsextrem chronos mbed_lpc1768 msb-430h msba2 red
 
 # If you want to add some extra flags when compile c++ files, add these flags
 # to CXXEXFLAGS variable
-CXXEXFLAGS += -std=c++11 -Wno-deprecated -I. -D__RIOTBUILD_FLAG
+CXXEXFLAGS += -std=c++11 -g -O0 -Wno-deprecated -I. -D__RIOTBUILD_FLAG
 
 USEMODULE += vtimer
 USEMODULE += timex
