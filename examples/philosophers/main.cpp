@@ -140,7 +140,7 @@ class philosopher : public event_based_actor {
   behavior waiting_for(const actor& what) {
     return {
       on(atom("taken"), what) >> [=] {
-        printf("%s has picked up chopsticks with IDs %d and %d and starts to eat\n",
+        printf("%s has picked up chopsticks with IDs %lu and %lu and starts to eat\n",
                name.c_str(), left->id(), right->id());
         // eat some time
         delayed_send(this, seconds(5), atom("think"));
@@ -166,19 +166,19 @@ class philosopher : public event_based_actor {
 void dining_philosophers() {
   scoped_actor self;
   // spawn philosophers
-  std::vector<std::string> names {"Plato", "Hume", "Kant"};
-  //                                 "Nietzsche", "Descartes"};
+  std::vector<std::string> names {"Plato", "Hume", "Kant",
+                                  "Nietzsche", "Descartes"};
 
   // create chopsticks
   printf("%s","chopstick ids are:");
   std::vector<actor> chopsticks;
   for (size_t i = 0; i < names.size(); ++i) {
-    chopsticks.push_back(spawn(chopstick));
-    printf(" %d", chopsticks.back()->id());
+    chopsticks.push_back(spawn<detached>(chopstick));
+    printf(" %lu", chopsticks.back()->id());
   }
   printf("\n");
    for (size_t i = 0; i < names.size(); ++i) {
-    spawn<philosopher>(names[i], chopsticks[i], chopsticks[(i + 1) % names.size()]);
+    spawn<philosopher,detached>(names[i], chopsticks[i], chopsticks[(i + 1) % names.size()]);
   }
 }
 
