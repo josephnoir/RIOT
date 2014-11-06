@@ -54,6 +54,7 @@ behavior fluffy(event_based_actor* self) {
     on(atom("poke"), arg_match) >> [=](const actor& other) {
       printf("quiek!\n");
       self->send(other, atom("blub"));
+      self->quit();
     }
   };
 }
@@ -88,7 +89,7 @@ int main() {
 
   auto f = spawn<detached>(fluffy);
   //auto f = spawn<fluffy,detached>();
-  {   
+  {
     scoped_actor self;
     self->send(f, atom("poke"), self);
     // self->send(f, atom("quit"));
@@ -120,6 +121,6 @@ int main() {
   await_all_actors_done();
   shutdown();
 
-  printf("\n******************************************\n");
+  printf("******************************************\n");
   return 0;
 }
