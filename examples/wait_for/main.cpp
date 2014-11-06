@@ -10,6 +10,7 @@ using namespace std;
 /*
 caf::condition_variable cv;
 caf::mutex cv_m;
+
 atomic<int> i = ATOMIC_VAR_INIT(0);
 atomic<int> j = ATOMIC_VAR_INIT(0);
 
