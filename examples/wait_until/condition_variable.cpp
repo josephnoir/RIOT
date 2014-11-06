@@ -115,27 +115,7 @@ void condition_variable::do_timed_wait(unique_lock<mutex>& lock,
   reltime = timex_sub(then, now);
   vtimer_t timer;
   vtimer_set_wakeup(&timer, reltime, sched_active_pid);
-
   wait(lock);
-//  priority_queue_node_t n;
-//  n.priority = sched_active_thread->priority;
-//  n.data = sched_active_pid;
-//  n.next = NULL;
-//  /* the signaling thread may not hold the mutex, the queue is not thread safe */
-//  unsigned old_state = disableIRQ();
-//  priority_queue_add(&m_queue), &n);
-//  restoreIRQ(old_state);
-//  mutex_unlock_and_sleep(&m_queue);
-//  if (n.data != -1u) {
-//    /* on signaling n.data is set to -1u */
-//    /* if it isn't set, then the wakeup is either spurious or a timer wakeup */
-//    old_state = disableIRQ();
-//    priority_queue_remove(&m_queue, &n);
-//    restoreIRQ(old_state);
-//  }
-//  mutex_lock(mutex);
-
-
   vtimer_remove(&timer);
  }
 
