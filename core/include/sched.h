@@ -141,7 +141,10 @@ typedef struct {
     __cpu_mask __bits[__CPU_SETSIZE / __NCPUBITS];
 } cpu_set_t;
 
-inline int sched_yield(void) { puts("sched_yield called\n"); } // needs implementation 
+inline int sched_yield(void) {
+  puts("[sched_yield] sched_yield called\n");
+  return 0;
+} // needs implementation
 
 /**
  * @brief   Call context switching at thread exit
