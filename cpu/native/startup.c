@@ -372,6 +372,7 @@ __attribute__((constructor)) static void startup(int argc, char **argv)
 
     puts("RIOT native hardware initialization complete.\n");
 
+#if (defined(__GNUC__) || defined(__GNUG__)) && !defined(__clang__)
     /* manually call other contructors in __init_array which haven't been called */
     typedef void (*func_ptr)(void);
     extern func_ptr __init_array_start[];
@@ -387,6 +388,7 @@ __attribute__((constructor)) static void startup(int argc, char **argv)
             (__init_array_start[i])();
         }
     }
+#endif
 
     kernel_init();
 }
