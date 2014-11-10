@@ -1,5 +1,5 @@
 
-#include "mutex.hpp"
+#include "caf/mutex.hpp"
 
 namespace caf {
 
