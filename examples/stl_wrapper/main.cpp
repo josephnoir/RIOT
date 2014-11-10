@@ -2,9 +2,9 @@
 #include <string>
 #include <cstdio>
 
-#include "mutex.hpp"
-#include "thread.hpp"
-#include "condition_variable.hpp"
+#include "caf/mutex.hpp"
+#include "caf/thread.hpp"
+#include "caf/condition_variable.hpp"
 
 using namespace std;
 using namespace caf;
@@ -37,6 +37,7 @@ int main() {
     lk.unlock();
     cv.notify_one();
   });
+  worker.detach();
  
   data = "Example data";
   // send data to the worker thread
