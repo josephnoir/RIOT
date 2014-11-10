@@ -10,7 +10,7 @@ extern "C" {
 #include "priority_queue.h"
 }
 
-#include "condition_variable.hpp"
+#include "caf/condition_variable.hpp"
 
 using namespace std::chrono;
 
