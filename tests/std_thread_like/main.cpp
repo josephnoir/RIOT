@@ -1,4 +1,3 @@
-
 #include <string>
 #include <chrono>
 #include <cstdio>
@@ -150,4 +149,3 @@ int main() {
 
   return 0;
 }
-
