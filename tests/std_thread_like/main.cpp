@@ -14,7 +14,7 @@ using namespace caf;
 
 /* http://en.cppreference.com/w/cpp/thread/thread */
 int main() {
-  printf("\n************ RIOT and C++ thread test ***********\n");
+  printf("\n************ C++ thread test ***********\n");
 
   assert(sched_num_threads == 2); // main + idle
  
@@ -146,7 +146,7 @@ int main() {
   assert(sched_num_threads == 2);
 
   printf("Bye, bye.\n");
-  printf("*********************************************\n");
+  printf("******************************************\n");
 
   return 0;
 }
