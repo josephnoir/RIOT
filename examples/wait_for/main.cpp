@@ -49,9 +49,11 @@ int main() {
     printf("[main] let's kill some threads\n");
   }*/
 
+  printf("[main] Creating mutex, condition and lock\n");
   caf::mutex mtx;
   caf::condition_variable cv;
   caf::unique_lock<caf::mutex> lk(mtx);
+  printf("[main] Let's wait for 100 msec\n");
   auto to = cv.wait_for(lk, chrono::milliseconds(100));
   if (to == caf::cv_status::timeout) {
     printf("[main] timeout\n");
