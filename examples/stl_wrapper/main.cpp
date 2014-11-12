@@ -1,6 +1,7 @@
 
 #include <string>
 #include <cstdio>
+#include <system_error>
 
 #include "caf/mutex.hpp"
 #include "caf/thread.hpp"
@@ -12,6 +13,7 @@ using namespace caf;
 /* example from http://en.cppreference.com/w/cpp/thread/condition_variable */
 int main() {
   printf("\n************ RIOT and C++ threads ***********\n");
+  /*
 
   mutex m;
   condition_variable cv;
@@ -34,7 +36,6 @@ int main() {
  
     // Manual unlocking is done before notifying, to avoid
     // that the waiting thread gets blocked again.
-    lk.unlock();
     cv.notify_one();
   });
   worker.detach();
@@ -45,8 +46,8 @@ int main() {
     lock_guard<mutex> lk(m);
     ready = true;
     printf("main() signals data ready for processing\n");
+    cv.notify_one();
   }
-  cv.notify_one();
 
   // wait for the worker
   {
@@ -54,7 +55,24 @@ int main() {
     cv.wait(lk, [&processed]{return processed;});
   }
   printf("Back in main(), data = %s\n", data.c_str());;
+  */
+ 
+  thread t;
+  printf("before starting, joinable: %d\n", t.joinable());
 
+  t = thread([]{
+    printf("alive\n");
+  });
+  printf("after starting, joinable: %d\n",t.joinable());
+
+  try {
+    printf("joining thread\n");
+    t.join();
+    printf("after join\n");
+  } catch (const std::system_error& e) {
+    printf("e.what(): %s\n", e.what());
+  }
+  
   printf("Bye, bye.\n");
   printf("*********************************************\n");
 
