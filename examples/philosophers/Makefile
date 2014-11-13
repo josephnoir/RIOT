@@ -27,20 +27,20 @@ CFLAGS += -DDEVELHELP -Wno-deprecated
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1 
 
-
-CXXEXFLAGS += --std=c++11 -g -O0 -D__RIOTBUILD_FLAG -DCAF_NO_MEM_MANAGEMENT
-
-CAF_HOME = /home/localadmin/actor-framework/
+CAF_HOME = /home/noir/actor-framework/
 
 INCLUDES += -I$(CAF_HOME)/libcaf_core/
-INCLUDES += -I$(CAF_HOME)/libcaf_io/
+
+# If you want to add some extra flags when compile c++ files, add these flags
+# to CXXEXFLAGS variable
+CXXEXFLAGS += -std=c++11 -Os -s -Wno-deprecated -I. -D__RIOTBUILD_FLAG -DCAF_NO_MEM_MANAGEMENT
 
 CXXEXTRALIBS += -Wl,--whole-archive
 CXXEXTRALIBS += $(CAF_HOME)/build/lib/libcaf_core_static.a
-CXXEXTRALIBS += $(CAF_HOME)/build/lib/libcaf_io_static.a
 CXXEXTRALIBS += -Wl,--no-whole-archive
 
 USEMODULE += vtimer
 USEMODULE += timex
 
 include $(RIOTBASE)/Makefile.include
+
