@@ -71,17 +71,30 @@ int main() {
 
   printf("Wait for ...\n");
   {
+    using chrono::system_clock;
+    constexpr unsigned timeout = 1000;
     mutex m;
     condition_variable cv;
-    auto start = std::chrono::system_clock::now();
-    thread t([&m,&cv]{
-      unique_lock<mutex> lk(m);
-      cv.wait_for(lk, chrono::milliseconds(1000));
-    });
-    t.join();
-    auto duration = std::chrono::duration_cast<chrono::milliseconds>(std::chrono::system_clock::now() - start);
-    assert(duration.count() >= 1000);
+    auto start = system_clock::now();
+    unique_lock<mutex> lk(m);
+    cv.wait_for(lk, chrono::milliseconds(timeout));
+    auto diff = chrono::duration_cast<chrono::milliseconds>(system_clock::now() - start);
+    assert(diff.count() >= timeout);
+  }
+  printf("Done\n");
 
+  printf("Wait until ...\n");
+  {
+    using chrono::system_clock;
+    constexpr unsigned timeout = 1000;
+    mutex m;
+    condition_variable cv;
+    auto start = system_clock::now();
+    auto tp = start + chrono::milliseconds(timeout);
+    unique_lock<mutex> lk(m);
+    cv.wait_until(lk, tp);
+    auto diff = chrono::duration_cast<chrono::milliseconds>(system_clock::now() - start);
+    assert(diff.count() >= timeout);
   }
   printf("Done\n");
 
