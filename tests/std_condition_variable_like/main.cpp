@@ -14,7 +14,7 @@ using namespace caf;
 
 /* http://en.cppreference.com/w/cpp/thread/mutex */
 int main() {
-  printf("\n************ RIOT and C++ condition_variable test ***********\n");
+  printf("\n************ C++ condition_variable test ***********\n");
 
   printf("Wait with predicate and notify one ... \n");
   {
@@ -103,7 +103,8 @@ int main() {
   printf("Done\n");
 
   printf("Bye, bye.\n");
-  printf("*********************************************\n");
+  printf("******************************************************\n");
 
   return 0;
 }
+

@@ -17,7 +17,7 @@ int main() {
   printf("\n************ C++ thread test ***********\n");
 
   assert(sched_num_threads == 2); // main + idle
- 
+
   printf("Creating one thread and passing an argument ...\n");
   {
     constexpr int i = 3;
@@ -97,7 +97,7 @@ int main() {
   printf("Done\n");
 
   assert(sched_num_threads == 2);
-  
+
   printf("Testing sleep_for ...\n");
   {
     timex_t before, after;
@@ -150,3 +150,4 @@ int main() {
 
   return 0;
 }
+
