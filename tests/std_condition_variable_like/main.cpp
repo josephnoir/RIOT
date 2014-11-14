@@ -1,11 +1,11 @@
 
 #include <string>
-#include <chrono>
 #include <cstdio>
 #include <cassert>
 #include <system_error>
 
 #include "caf/mutex.hpp"
+#include "caf/chrono.hpp"
 #include "caf/thread.hpp"
 #include "caf/condition_variable.hpp"
 
@@ -72,29 +72,33 @@ int main() {
   printf("Wait for ...\n");
   {
     using chrono::system_clock;
-    constexpr unsigned timeout = 1000;
+    constexpr unsigned timeout = 1;
     mutex m;
     condition_variable cv;
-    auto start = system_clock::now();
+    timex_t before, after;
     unique_lock<mutex> lk(m);
-    cv.wait_for(lk, chrono::milliseconds(timeout));
-    auto diff = chrono::duration_cast<chrono::milliseconds>(system_clock::now() - start);
-    assert(diff.count() >= timeout);
+    vtimer_now(&before);
+    cv.wait_for(lk, chrono::seconds(timeout));
+    vtimer_now(&after);
+    auto diff = timex_sub(after,before);
+    assert(diff.seconds >= timeout);
   }
   printf("Done\n");
 
   printf("Wait until ...\n");
   {
     using chrono::system_clock;
-    constexpr unsigned timeout = 1000;
+    constexpr unsigned timeout = 1;
     mutex m;
     condition_variable cv;
-    auto start = system_clock::now();
-    auto tp = start + chrono::milliseconds(timeout);
+    timex_t before, after;
     unique_lock<mutex> lk(m);
-    cv.wait_until(lk, tp);
-    auto diff = chrono::duration_cast<chrono::milliseconds>(system_clock::now() - start);
-    assert(diff.count() >= timeout);
+    vtimer_now(&before);
+    auto time = caf::now() += chrono::seconds(timeout);
+    cv.wait_until(lk, time);
+    vtimer_now(&after);
+    auto diff = timex_sub(after,before);
+    assert(diff.seconds >= timeout);
   }
   printf("Done\n");
 

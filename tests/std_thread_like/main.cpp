@@ -100,10 +100,12 @@ int main() {
   
   printf("Testing sleep_for ...\n");
   {
-    auto start = std::chrono::system_clock::now();
+    timex_t before, after;
+    vtimer_now(&before);
     this_thread::sleep_for(chrono::seconds(1));
-    auto duration = std::chrono::duration_cast<chrono::milliseconds>(std::chrono::system_clock::now() - start);
-    assert(duration.count() >= 1000);
+    vtimer_now(&after);
+    auto diff = timex_sub(after,before);
+    assert(diff.seconds >= 1);
   }
   printf("Done\n");
 
