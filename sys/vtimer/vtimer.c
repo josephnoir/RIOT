@@ -346,14 +346,17 @@ int vtimer_set_wakeup(vtimer_t *t, timex_t interval, kernel_pid_t pid)
 
 int vtimer_set_wakeup_timepoint(vtimer_t *timer, timex_t tp, kernel_pid_t pid)
 {
-    DEBUG("vtimer_set_wakeup_absolute(): New timer until: %" PRIu32 " %" PRIu32 "\n", timer->absolute.seconds, timer->absolute.microseconds);
-
     timer->action = vtimer_callback_wakeup;
     timer->arg = NULL;
     timer->absolute = tp;
     timer->pid = pid;
 
+    DEBUG("vtimer_set_wakeup_absolute(): New timer until: %" PRIu32 " %" PRIu32 "\n", timer->absolute.seconds, timer->absolute.microseconds);
+
     normalize_to_tick(&(timer->absolute));
+
+    timex_t now;
+    vtimer_now(&now);
 
     DEBUG("vtimer_set_wakeup_absolute(): Absolute: %" PRIu32 " %" PRIu32 "\n", timer->absolute.seconds, timer->absolute.microseconds);
     DEBUG("vtimer_set_wakeup_absolute(): NOW: %" PRIu32 " %" PRIu32 "\n", now.seconds, now.microseconds);
