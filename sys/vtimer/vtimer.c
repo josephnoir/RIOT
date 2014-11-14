@@ -344,6 +344,51 @@ int vtimer_set_wakeup(vtimer_t *t, timex_t interval, kernel_pid_t pid)
     return vtimer_set(t);
 }
 
+int vtimer_set_wakeup_timepoint(vtimer_t *timer, timex_t tp, kernel_pid_t pid)
+{
+    DEBUG("vtimer_set_wakeup_absolute(): New timer until: %" PRIu32 " %" PRIu32 "\n", timer->absolute.seconds, timer->absolute.microseconds);
+
+    timer->action = vtimer_callback_wakeup;
+    timer->arg = NULL;
+    timer->absolute = tp;
+    timer->pid = pid;
+
+    normalize_to_tick(&(timer->absolute));
+
+    DEBUG("vtimer_set_wakeup_absolute(): Absolute: %" PRIu32 " %" PRIu32 "\n", timer->absolute.seconds, timer->absolute.microseconds);
+    DEBUG("vtimer_set_wakeup_absolute(): NOW: %" PRIu32 " %" PRIu32 "\n", now.seconds, now.microseconds);
+
+    int result = 0;
+
+    if (timer->absolute.seconds == 0) {
+        if (timer->absolute.microseconds > 10) {
+            timer->absolute.microseconds -= 10;
+        }
+    }
+
+    unsigned state = disableIRQ();
+    if (timer->absolute.seconds != seconds) {
+        /* we're long-term */
+        DEBUG("vtimer_set(): setting long_term\n");
+        result = set_longterm(timer);
+    }
+    else {
+        DEBUG("vtimer_set(): setting short_term\n");
+
+        if (set_shortterm(timer)) {
+            /* delay update of next shortterm timer if we
+            * are called from within vtimer_callback. */
+
+            if (!in_callback) {
+                result = update_shortterm();
+            }
+        }
+    }
+    restoreIRQ(state);
+
+    return result;
+}
+
 int vtimer_usleep(uint32_t usecs)
 {
     timex_t offset = timex_set(0, usecs);
