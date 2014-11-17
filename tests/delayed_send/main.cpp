@@ -26,10 +26,10 @@ namespace {
   constexpr unsigned timeout = 500000;
 }
 
-behavior ping(event_based_actor* self) {
+behavior ping(event_based_actor* self, int group) {
   return {
     on(atom("ping"), arg_match) >> [=](const actor& pong_actor, int cnt) {
-      printf("ping\n");
+      printf("ping:%d\n", group);
       self->delayed_send(pong_actor, chrono::microseconds(timeout), atom("pong"), cnt + 1);
     },
     others() >> [] {
@@ -38,11 +38,11 @@ behavior ping(event_based_actor* self) {
   };
 }
 
-behavior pong(event_based_actor* self, const actor& pung_actor) {
+behavior pong(event_based_actor* self, const actor& pung_actor, int group) {
   self->send(pung_actor, atom("pung"), self, 0);
   return {
     on(atom("pong"), arg_match) >> [=](int cnt) {
-      printf("pong\n");
+      printf("pong:%d\n", group);
       self->delayed_send(pung_actor, chrono::microseconds(timeout), atom("pung"), self, cnt);
     },
     on(atom("poke"), arg_match) >> [=] (const actor& dude) {
@@ -54,10 +54,10 @@ behavior pong(event_based_actor* self, const actor& pung_actor) {
   };
 }
 
-behavior pung(event_based_actor* self, const actor& pang_actor) {
+behavior pung(event_based_actor* self, const actor& pang_actor, int group) {
   return {
     on(atom("pung"), arg_match) >> [=] (const actor& pong_actor, int cnt) {
-      printf("pung\n");
+      printf("pung:%d\n", group);
       self->delayed_send(pang_actor, chrono::microseconds(timeout), atom("pang"), pong_actor, cnt);
     },
     others() >> [] {
@@ -66,10 +66,10 @@ behavior pung(event_based_actor* self, const actor& pang_actor) {
   };
 }
 
-behavior pang(event_based_actor* self, const actor& ping_actor) {
+behavior pang(event_based_actor* self, const actor& ping_actor, int group) {
   return {
     on(atom("pang"), arg_match) >> [=] (const actor& pong_actor, int cnt) {
-      printf("pang\n");
+      printf("pang:%d\n", group);
       self->delayed_send(ping_actor, chrono::microseconds(timeout), atom("ping"), pong_actor, cnt);
     },
     others() >> [] {
@@ -81,10 +81,15 @@ behavior pang(event_based_actor* self, const actor& ping_actor) {
 int main() {
   printf("\n************ RIOT and CAF demo ***********\n");
 
-  auto a = spawn<detached>(ping);
-  auto b = spawn<detached>(pang, a);
-  auto c = spawn<detached>(pung, b);
-  auto d = spawn<detached>(pong, c);
+  auto a = spawn<detached>(ping, 1);
+  auto b = spawn<detached>(pang, a, 1);
+  auto c = spawn<detached>(pung, b, 1);
+  auto d = spawn<detached>(pong, c, 1);
+
+  auto f = spawn<detached>(ping, 2);
+  auto g = spawn<detached>(pang, f, 2);
+  auto h = spawn<detached>(pung, g, 2);
+  auto i = spawn<detached>(pong, h, 2);
 
   await_all_actors_done();
   shutdown();
