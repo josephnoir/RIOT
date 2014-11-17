@@ -80,10 +80,6 @@
 #ifndef _SCHEDULER_H
 #define _SCHEDULER_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "stdio.h"
 
 #include <stddef.h>
