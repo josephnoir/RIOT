@@ -80,13 +80,6 @@
 #ifndef _SCHEDULER_H
 #define _SCHEDULER_H
 
-<<<<<<< HEAD
-=======
-#ifdef __cplusplus
-extern "C" {
-#endif
-
->>>>>>> Add missing function (no implementation)
 #include "stdio.h"
 
 #include <stddef.h>
