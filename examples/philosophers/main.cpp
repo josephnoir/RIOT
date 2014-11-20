@@ -165,19 +165,20 @@ class philosopher : public event_based_actor {
 
 void dining_philosophers() {
   scoped_actor self;
-  // create five chopsticks
+  // spawn philosophers
+  std::vector<std::string> names {"Plato", "Hume", "Kant"};
+  //                                 "Nietzsche", "Descartes"};
+
+  // create chopsticks
   printf("%s","chopstick ids are:");
   std::vector<actor> chopsticks;
-  for (size_t i = 0; i < 5; ++i) {
+  for (size_t i = 0; i < names.size(); ++i) {
     chopsticks.push_back(spawn(chopstick));
     printf(" %d", chopsticks.back()->id());
   }
   printf("\n");
-  // spawn five philosophers
-  std::vector<std::string> names {"Plato", "Hume", "Kant",
-                                   "Nietzsche", "Descartes"};
-  for (size_t i = 0; i < 5; ++i) {
-    spawn<philosopher>(names[i], chopsticks[i], chopsticks[(i + 1) % 5]);
+   for (size_t i = 0; i < names.size(); ++i) {
+    spawn<philosopher>(names[i], chopsticks[i], chopsticks[(i + 1) % names.size()]);
   }
 }
 
