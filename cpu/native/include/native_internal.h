@@ -61,7 +61,9 @@ void native_interrupt_init(void);
 extern void native_hwtimer_pre_init(void);
 
 void native_irq_handler(void);
+void voodoo_slh(ucontext_t *ctx);
 extern void _native_sig_leave_tramp(void);
+extern void _native_sig_leave_handler(void);
 
 void _native_syscall_leave(void);
 void _native_syscall_enter(void);
