@@ -344,7 +344,6 @@ __attribute__((constructor)) static void startup(int argc, char **argv)
     board_init();
 
     puts("RIOT native hardware initialization complete.\n");
-    printf("inisr: %i", _native_in_isr);
     eINT();
     kernel_init();
 }

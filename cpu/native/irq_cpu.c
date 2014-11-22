@@ -255,6 +255,7 @@ void native_irq_handler(void)
     while (_native_sigpend > 0) {
         int sig = _native_popsig();
         _native_sigpend--;
+        //puts("BII");
 
         if (native_irq_handlers[sig] != NULL) {
             DEBUG("calling interrupt handler for %i\n", sig);
@@ -320,7 +321,7 @@ void native_isr_entry(int sig, siginfo_t *info, void *context)
     }
 
     native_isr_context.uc_stack.ss_sp = __isr_stack;
-    native_isr_context.uc_stack.ss_size = SIGSTKSZ;
+    native_isr_context.uc_stack.ss_size = sizeof(__isr_stack);
     native_isr_context.uc_stack.ss_flags = 0;
     makecontext(&native_isr_context, native_irq_handler, 0);
     _native_cur_ctx = (ucontext_t *)sched_active_thread->sp;
@@ -489,13 +490,13 @@ void native_interrupt_init(void)
     }
 
     native_isr_context.uc_stack.ss_sp = __isr_stack;
-    native_isr_context.uc_stack.ss_size = SIGSTKSZ;
+    native_isr_context.uc_stack.ss_size = sizeof(__isr_stack);
     native_isr_context.uc_stack.ss_flags = 0;
     _native_isr_ctx = &native_isr_context;
 
     static stack_t sigstk;
     sigstk.ss_sp = sigalt_stk;
-    sigstk.ss_size = SIGSTKSZ;
+    sigstk.ss_size = sizeof(__isr_stack);
     sigstk.ss_flags = 0;
 
     if (sigaltstack(&sigstk, NULL) < 0) {
