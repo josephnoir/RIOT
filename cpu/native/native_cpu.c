@@ -18,6 +18,12 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+
+#define __USE_GNU
+#include <signal.h>
+#undef __USE_GNU
+
 
 #ifdef __MACH__
 #define _XOPEN_SOURCE
@@ -38,8 +44,6 @@
 #define VALGRIND_STACK_REGISTER(...)
 #define VALGRIND_DEBUG(...)
 #endif
-
-#include <stdlib.h>
 
 #include "kernel_internal.h"
 #include "kernel.h"
@@ -83,6 +87,12 @@ int reboot_arch(int mode)
     }
 
     errx(EXIT_FAILURE, "reboot: this should not have been reached");
+}
+
+void _native_mod_ctx_leave_sigh(ucontext_t *ctx)
+{
+    _native_saved_eip = ctx->uc_mcontext.gregs[REG_EIP];
+    ctx->uc_mcontext.gregs[REG_EIP] = (unsigned int)&_native_sig_leave_handler;
 }
 
 /**
@@ -148,7 +158,8 @@ void isr_cpu_switch_context_exit(void)
     /* the next context will have interrupts enabled due to ucontext */
     DEBUG("XXX: cpu_switch_context_exit: native_interrupts_enabled = 1;\n");
     native_interrupts_enabled = 1;
-    _native_in_isr = 0;
+
+    _native_mod_ctx_leave_sigh(ctx);
 
     if (setcontext(ctx) == -1) {
         err(EXIT_FAILURE, "cpu_switch_context_exit(): setcontext():");
@@ -192,7 +203,8 @@ void isr_thread_yield(void)
     DEBUG("isr_thread_yield(): switching to(%s)\n\n", sched_active_thread->name);
 
     native_interrupts_enabled = 1;
-    _native_in_isr = 0;
+    _native_mod_ctx_leave_sigh(ctx);
+
     if (setcontext(ctx) == -1) {
         err(EXIT_FAILURE, "isr_thread_yield(): setcontext()");
     }
@@ -203,7 +215,7 @@ void thread_yield_higher(void)
     ucontext_t *ctx = (ucontext_t *)(sched_active_thread->sp);
     if (_native_in_isr == 0) {
         _native_in_isr = 1;
-        dINT();
+        dINT(); /* interrupts have to be ON when thread_yield_higher is called */
         native_isr_context.uc_stack.ss_sp = __isr_stack;
         native_isr_context.uc_stack.ss_size = SIGSTKSZ;
         native_isr_context.uc_stack.ss_flags = 0;

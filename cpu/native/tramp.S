@@ -94,4 +94,10 @@ _native_sig_leave_tramp:
     popfl
 
     ret
+
+.globl _native_sig_leave_handler
+_native_sig_leave_handler:
+    pushl _native_saved_eip
+    movl $0x0, _native_in_isr
+    ret
 #endif

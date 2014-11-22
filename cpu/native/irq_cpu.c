@@ -275,6 +275,7 @@ void native_irq_handler(void)
 void isr_set_sigmask(ucontext_t *ctx)
 {
     ctx->uc_sigmask = _native_sig_set_dint;
+    native_interrupts_enabled = 0;
 }
 
 /**
@@ -340,7 +341,7 @@ void native_isr_entry(int sig, siginfo_t *info, void *context)
     _native_saved_eip = ((struct sigcontext *)context)->sc_eip;
     ((struct sigcontext *)context)->sc_eip = (unsigned int)&_native_sig_leave_tramp;
 #else
-#ifdef __arm__
+#if defined(__arm__)
     _native_saved_eip = ((ucontext_t *)context)->uc_mcontext.arm_pc;
     ((ucontext_t *)context)->uc_mcontext.arm_pc = (unsigned int)&_native_sig_leave_tramp;
 #else
