@@ -43,10 +43,7 @@
 #include "native_internal.h"
 
 #define ENABLE_DEBUG (0)
-
 #include "debug.h"
-
-#define HWTIMERMINOFFSET (1000UL) // 1ms
 
 static unsigned long native_hwtimer_now;
 static unsigned long time_null;
@@ -61,12 +58,11 @@ static void (*int_handler)(int);
 /**
  * Subtract the `struct timeval' values x and y, storing the result in
  * result.
- * Return 1 if the difference is negative, otherwise 0.
  *
  * Source:
  * http://www.gnu.org/software/libc/manual/html_node/Elapsed-Time.html
  */
-int timeval_subtract(struct timeval *result, struct timeval *x, struct timeval *y)
+void timeval_subtract(struct timeval *result, struct timeval *x, struct timeval *y)
 {
     /* Perform the carry for the later subtraction by updating y. */
     if (x->tv_usec < y->tv_usec) {
@@ -86,9 +82,6 @@ int timeval_subtract(struct timeval *result, struct timeval *x, struct timeval *
      */
     result->tv_sec = x->tv_sec - y->tv_sec;
     result->tv_usec = x->tv_usec - y->tv_usec;
-
-    /* Return 1 if result is negative. */
-    return x->tv_sec < y->tv_sec;
 }
 
 
@@ -156,16 +149,17 @@ void schedule_timer(void)
         }
     }
 
-    /* next pending timer is in slot next_timer */
-    struct timeval now;
-    hwtimer_arch_now(); // update timer
-    ticks2tv(native_hwtimer_now, &now);
-
     struct itimerval result;
     memset(&result, 0, sizeof(result));
 
-    int retval = timeval_subtract(&result.it_value, &native_hwtimer[next_timer].it_value, &now);
-    if (retval || (tv2ticks(&result.it_value) < HWTIMERMINOFFSET)) {
+    /* next pending timer is in slot next_timer */
+    struct timeval now;
+    hwtimer_arch_now(); /* update timer */
+    ticks2tv(native_hwtimer_now, &now);
+    timeval_subtract(&result.it_value, &native_hwtimer[next_timer].it_value, &now);
+
+    if ((result.it_value.tv_sec < 0)
+            ||  ((result.it_value.tv_sec == 0) && (result.it_value.tv_usec == 0))) {
         DEBUG("\033[31mschedule_timer(): timer is already due (%i), mitigating.\033[0m\n", next_timer);
         result.it_value.tv_sec = 0;
         result.it_value.tv_usec = 1;
