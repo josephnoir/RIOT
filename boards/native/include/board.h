@@ -31,6 +31,7 @@ extern "C" {
 #endif
 
 #define F_CPU 1000000
+#define HWTIMER_SPIN_BARRIER 200
 
 void _native_LED_GREEN_OFF(void);
 #define LED_GREEN_OFF (_native_LED_GREEN_OFF())
