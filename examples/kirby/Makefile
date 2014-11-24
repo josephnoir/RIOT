@@ -58,7 +58,7 @@ INCLUDES += -I$(CAF_HOME)/libcaf_io/
 
 CXXEXTRALIBS += -Wl,--whole-archive
 CXXEXTRALIBS += $(CAF_HOME)/build/lib/libcaf_core_static.a
-CXXEXTRALIBS += $(CAF_HOME)/build/lib/libcaf_io_static.a
+#CXXEXTRALIBS += $(CAF_HOME)/build/lib/libcaf_io_static.a
 CXXEXTRALIBS += -Wl,--no-whole-archive
 
 USEMODULE += vtimer
