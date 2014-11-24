@@ -170,7 +170,7 @@ void schedule_timer(void)
         err(EXIT_FAILURE, "schedule_timer: setitimer");
     }
     else {
-        DEBUG("schedule_timer(): set next timer (%i).\n", next_timer);
+        DEBUG("schedule_timer(): set next timer (%i) to fire in %us/%uus.\n", next_timer, (unsigned)result.it_value.tv_sec, (unsigned)result.it_value.tv_usec);
     }
     _native_syscall_leave();
 }
