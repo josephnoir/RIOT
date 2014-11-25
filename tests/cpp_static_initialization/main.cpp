@@ -16,12 +16,12 @@ struct my_struct {
 static my_struct ms;
 
 int main() {
-  printf("\n************ RIOT and C++ condition_variable test ***********\n");
+  printf("\n************ C++ const initialization test ***********\n");
 
   assert(ms.data == val);
 
-  printf("Bye, bye.\n");
-  printf("*********************************************\n");
+  printf("Done.\n");
+  printf("********************************************************\n");
 
   return 0;
 }

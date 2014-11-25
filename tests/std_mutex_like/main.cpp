@@ -14,7 +14,7 @@ using namespace caf;
 
 /* http://en.cppreference.com/w/cpp/thread/mutex */
 int main() {
-  printf("\n************ RIOT and C++ mutex test ***********\n");
+  printf("\n************ C++ mutex test ***********\n");
 
   printf("Lock and unlock ... \n");
   {
@@ -62,7 +62,7 @@ int main() {
   printf("Done\n");
 
   printf("Bye, bye.\n");
-  printf("*********************************************\n");
+  printf("*****************************************\n");
 
   return 0;
 }
