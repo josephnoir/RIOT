@@ -30,7 +30,7 @@
  *
  * Given threads with priorities A=6, B=1, and C=3, B has the highest
  * priority.
- * 
+ *
  * A higher priority means that the scheduler will run this thread
  * whenever it becomes runnable instead of a thread with a lower
  * priority.
@@ -80,6 +80,8 @@
 #ifndef _SCHEDULER_H
 #define _SCHEDULER_H
 
+#include "stdio.h"
+
 #include <stddef.h>
 #include "bitarithm.h"
 #include "tcb.h"
@@ -121,6 +123,18 @@ void sched_set_status(tcb_t *process, unsigned int status);
  * @param[in]   other_prio      The priority of the target thread
  */
 void sched_switch(uint16_t other_prio);
+
+#define __CPU_SETSIZE 1024
+#define __NCPUBITS (8* sizeof(__cpu_mask))
+typedef unsigned long int __cpu_mask;
+typedef struct {
+    __cpu_mask __bits[__CPU_SETSIZE / __NCPUBITS];
+} cpu_set_t;
+
+inline int sched_yield(void) {
+  puts("[sched_yield] sched_yield called\n");
+  return 0;
+} // needs implementation
 
 /**
  * @brief   Call context switching at thread exit

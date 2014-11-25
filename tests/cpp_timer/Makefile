@@ -32,7 +32,7 @@ FEATURES_REQUIRED += cpp
 
 # If you want to add some extra flags when compile c++ files, add these flags
 # to CXXEXFLAGS variable
-CXXEXFLAGS += -std=c++11 -I. -D__RIOTBUILD_FLAG -Wno-deprecated -m32
+CXXEXFLAGS += -std=c++11 -I. -D__RIOTBUILD_FLAG -Wno-deprecated -m32 -pthread
 
 USEMODULE += vtimer
 USEMODULE += timex
