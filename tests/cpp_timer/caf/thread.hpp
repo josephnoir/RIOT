@@ -258,7 +258,7 @@ namespace this_thread {
 using std::this_thread::get_id;
 
 // GCC hack
-#if !defined(_GLIBCXX_USE_SCHED_YIELD) && !defined(__clang__)
+#if !defined(_GLIBCXX_USE_SCHED_YIELD) && !defined(__clang__) && !defined(__RIOTBUILD_FLAG)
 inline void yield() noexcept {
   timespec req;
   req.tv_sec = 0;
@@ -270,7 +270,7 @@ using std::this_thread::yield;
 #endif
 
 // another GCC hack
-#if !defined(_GLIBCXX_USE_NANOSLEEP) && !defined(__clang__)
+#if !defined(_GLIBCXX_USE_NANOSLEEP) && !defined(__clang__) && !defined(__RIOTBUILD_FLAG)
 template <class Rep, typename Period>
 inline void sleep_for(const chrono::duration<Rep, Period>& rt) {
   auto sec = chrono::duration_cast<chrono::seconds>(rt);
