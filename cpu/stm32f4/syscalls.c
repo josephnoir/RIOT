@@ -337,3 +337,12 @@ int _kill(int pid, int sig)
     errno = ESRCH;                         /* not implemented yet */
     return -1;
 }
+
+
+__attribute__ ((weak))
+int _gettimeofday(struct timeval *tp, void *restrict tzp)
+{
+    (void) tp;
+    (void) tzp;
+    return -1;
+}
