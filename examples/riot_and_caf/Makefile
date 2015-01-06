@@ -31,7 +31,7 @@ QUIET ?= 1
 # to CXXEXFLAGS variable
 CXXEXFLAGS += --std=c++11 -g -O0 -D__RIOTBUILD_FLAG -DCAF_NO_MEM_MANAGEMENT
 
-CAF_HOME = /home/noir/actor-framework/
+CAF_HOME = /Users/noir/Git/actor-framework/
 
 INCLUDES += -I$(CAF_HOME)/libcaf_core/
 
