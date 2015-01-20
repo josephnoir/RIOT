@@ -43,14 +43,18 @@
 
 void _gettimeofday(void)           __attribute__ ((weak, alias("vtimer_gettimeofday")));
 
+
 static void vtimer_callback(void *ptr);
 static void vtimer_callback_tick(vtimer_t *timer);
 static void vtimer_callback_msg(vtimer_t *timer);
 static void vtimer_callback_wakeup(vtimer_t *timer);
 
 static int vtimer_set(vtimer_t *timer);
+static int vtimer_set_absolute(vtimer_t *timer);
+
 static int set_longterm(vtimer_t *timer);
 static int set_shortterm(vtimer_t *timer);
+
 
 static priority_queue_t longterm_priority_queue_root = PRIORITY_QUEUE_INIT;
 static priority_queue_t shortterm_priority_queue_root = PRIORITY_QUEUE_INIT;
@@ -237,14 +241,19 @@ void normalize_to_tick(timex_t *time)
 static int vtimer_set(vtimer_t *timer)
 {
     DEBUG("vtimer_set(): New timer. Offset: %" PRIu32 " %" PRIu32 "\n", timer->absolute.seconds, timer->absolute.microseconds);
+    DEBUG("vtimer_set(): NOW: %" PRIu32 " %" PRIu32 "\n", now.seconds, now.microseconds);
 
     timex_t now;
     vtimer_now(&now);
     timer->absolute = timex_add(now, timer->absolute);
+    return vtimer_set_absolute(timer);
+}
+
+static int vtimer_set_absolute(vtimer_t *timer)
+{
     normalize_to_tick(&(timer->absolute));
 
     DEBUG("vtimer_set(): Absolute: %" PRIu32 " %" PRIu32 "\n", timer->absolute.seconds, timer->absolute.microseconds);
-    DEBUG("vtimer_set(): NOW: %" PRIu32 " %" PRIu32 "\n", now.seconds, now.microseconds);
 
     int result = 0;
 
@@ -276,6 +285,7 @@ static int vtimer_set(vtimer_t *timer)
 
     return result;
 }
+
 
 void vtimer_now(timex_t *out)
 {
@@ -336,6 +346,15 @@ int vtimer_set_wakeup(vtimer_t *t, timex_t interval, kernel_pid_t pid)
     t->absolute = interval;
     t->pid = pid;
     return vtimer_set(t);
+}
+
+int vtimer_set_wakeup_timepoint(vtimer_t *t, timex_t absolute, kernel_pid_t pid)
+{
+    t->action = vtimer_callback_wakeup;
+    t->arg = NULL;
+    t->absolute = absolute;
+    t->pid = pid;
+    return vtimer_set_absolute(t);
 }
 
 int vtimer_usleep(uint32_t usecs)

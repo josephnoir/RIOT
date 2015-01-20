@@ -120,6 +120,15 @@ int vtimer_set_msg(vtimer_t *t, timex_t interval, kernel_pid_t pid, uint16_t typ
 int vtimer_set_wakeup(vtimer_t *t, timex_t interval, kernel_pid_t pid);
 
 /**
+ * @brief   set a vtimer with wakeup event
+ * @param[in]   t           pointer to preinitialised vtimer_t
+ * @param[in]   absolute    timpoint when to wake up
+ * @param[in]   pid         process id
+ * @return      0 on success, < 0 on error
+ */
+int vtimer_set_wakeup_timepoint(vtimer_t *t, timex_t absolute, kernel_pid_t pid);
+
+/**
  * @brief   remove a vtimer
  * @param[in]   t           pointer to preinitialised vtimer_t
  * @return      0 on success, < 0 on error
