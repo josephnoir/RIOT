@@ -11,8 +11,7 @@
  * @{
  *
  * @file
- * @brief       Example application for demonstrating UDP on top of IPv6 and
- *              6LoWPAN.
+ * @brief       Demonstrating the sending and receiving of UDP data
  *
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  *
@@ -22,10 +21,6 @@
 #include <stdio.h>
 
 #include "kernel.h"
-#include "posix_io.h"
-#include "board_uart0.h"
-#include "shell.h"
-#include "shell_commands.h"
 #include "net/ng_netbase.h"
 #include "net/ng_ipv6.h"
 #include "net/ng_udp.h"
@@ -129,7 +124,7 @@ static void stop_server(void)
     puts("Success: stopped UDP server");
 }
 
-static int udp_cmd(int argc, char **argv)
+int udp_cmd(int argc, char **argv)
 {
     if (argc < 2) {
         printf("usage: %s [send|server]\n", argv[0]);
@@ -165,25 +160,5 @@ static int udp_cmd(int argc, char **argv)
     else {
         puts("error: invalid command");
     }
-    return 0;
-}
-
-static const shell_command_t shell_commands[] = {
-    { "udp", "send data over UDP and listen on UDP ports", udp_cmd },
-    { NULL, NULL, NULL }
-};
-
-int main(void)
-{
-    shell_t shell;
-
-    puts("6LoWPAN UDP example application");
-
-    /* start shell */
-    puts("All up, running the shell now");
-    posix_open(uart0_handler_pid, 0);
-    shell_init(&shell, shell_commands, UART0_BUFSIZE, uart0_readc, uart0_putc);
-    shell_run(&shell);
-
     return 0;
 }
