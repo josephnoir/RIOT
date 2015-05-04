@@ -1,5 +1,5 @@
 # name of your application
-APPLICATION = ng_6lo_udp
+APPLICATION = ng_networking
 
 # If no BOARD is found in the environment, use this default:
 BOARD ?= native
