@@ -9,7 +9,7 @@ RIOTBASE ?= $(CURDIR)/../..
 
 # Specify the modules that are used
 USEMODULE += ng_netif
-USEMODULE += ng_sixlowpan
+USEMODULE += ng_sixlowpan_frag
 USEMODULE += ng_ipv6
 USEMODULE += ng_udp
 USEMODULE += ng_pktdump
