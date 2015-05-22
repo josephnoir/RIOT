@@ -88,23 +88,27 @@ class thread_id {
   inline thread_id() noexcept : m_handle{thread_uninitialized} {}
   inline thread_id(kernel_pid_t handle) : m_handle{handle} {}
 
-  inline bool operator==(thread_id other) noexcept {
-    return m_handle == other.m_handle;
+  friend bool operator==(thread_id x, thread_id y) noexcept {
+    return x.m_handle == y.m_handle;
   }
-  inline bool operator!=(thread_id other) noexcept {
-    return !(m_handle == other.m_handle);
+  friend bool operator!=(thread_id x, thread_id y) noexcept {
+    return !(x.m_handle == y.m_handle);
   }
-  inline bool operator<(thread_id other) noexcept {
-    return m_handle < other.m_handle;
+  friend bool operator<(thread_id x, thread_id y) noexcept {
+    return x.m_handle < y.m_handle;
   }
-  inline bool operator<=(thread_id other) noexcept {
-    return !(m_handle > other.m_handle);
+  friend bool operator<=(thread_id x, thread_id y) noexcept {
+    return !(x.m_handle > y.m_handle);
   }
-  inline bool operator>(thread_id other) noexcept {
-    return m_handle > other.m_handle;
+  friend bool operator>(thread_id x, thread_id y) noexcept {
+    return x.m_handle > y.m_handle;
   }
-  inline bool operator>=(thread_id other) noexcept {
-    return !(m_handle < other.m_handle);
+  friend bool operator>=(thread_id x, thread_id y) noexcept {
+    return !(x.m_handle < y.m_handle);
+  }
+
+  inline size_t hash() const {
+    return static_cast<size_t>(m_handle);
   }
 
  private:
@@ -252,5 +256,16 @@ inline thread& thread::operator=(thread&& other) noexcept {
 inline void swap(thread& lhs, thread& rhs) noexcept { lhs.swap(rhs); }
 
 } // namespace riot
+
+namespace std {
+
+template <>
+struct hash<riot::thread::id> {
+  std::size_t operator()(const riot::thread::id& arg) const {
+    return arg.hash();
+  }
+};
+
+} // namespace std
 
 #endif // RIOT_THREAD_HPP
