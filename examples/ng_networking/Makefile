@@ -7,12 +7,18 @@ BOARD ?= native
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/../..
 
-# Specify the modules that are used
+# Include packages that pull up and auto-init the link layer.
+# NOTE: 6LoWPAN will be included if IEEE802.15.4 devices are present
 USEMODULE += ng_netif
-USEMODULE += ng_sixlowpan_frag
-USEMODULE += ng_ipv6
+USEMODULE += auto_init_ng_netif
+# Specify the mandatory networking modules for IPv6 and UDP
+USEMODULE += ng_ipv6_default
 USEMODULE += ng_udp
+# This application dumps received packets to STIO using the pktdump module
 USEMODULE += ng_pktdump
+# Additional networking modules that can be dropped if not needed
+USEMODULE += ng_icmpv6_echo
+# Add also the shell, some shell commands (which are based on uart0 in this app)
 USEMODULE += uart0
 USEMODULE += shell
 USEMODULE += shell_commands
