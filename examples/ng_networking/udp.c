@@ -49,8 +49,8 @@ static void send(char *addr_str, char *port_str, char *data)
         puts("Error: unable to parse destination port");
         return;
     }
-    port[0] = tmp >> 8;
-    port[1] = (uint8_t)tmp;
+    port[0] = (uint8_t)tmp;
+    port[1] = tmp >> 8;
 
     /* allocate payload */
     payload = ng_pktbuf_add(NULL, data, strlen(data), NG_NETTYPE_UNDEF);
