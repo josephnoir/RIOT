@@ -14,7 +14,7 @@ USEMODULE += auto_init_ng_netif
 # Specify the mandatory networking modules for IPv6 and UDP
 USEMODULE += ng_ipv6_default
 USEMODULE += ng_udp
-# This application dumps received packets to STIO using the pktdump module
+# This application dumps received packets to STDIO using the pktdump module
 USEMODULE += ng_pktdump
 # Additional networking modules that can be dropped if not needed
 USEMODULE += ng_icmpv6_echo
