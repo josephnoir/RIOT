@@ -15,8 +15,6 @@ CFLAGS += -DDEVELHELP -Wno-deprecated
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1
 
-BOARD_WHITELIST := stm32f4discovery native
-
 # If you want to add some extra flags when compile c++ files, add these flags
 # to CXXEXFLAGS variable
 CXXEXFLAGS += -std=c++11 -g -O0 -Wno-deprecated
