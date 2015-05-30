@@ -29,7 +29,7 @@ extern "C" {
  * somehow pulled in as a dependency by the compiler-generated global (static)
  * constructor code.
  */
-void *__dso_handle = NULL;
+void *__dso_handle __attribute__((weak)) = NULL;
 
 /**
  * @brief Definition of a pure virtual function
