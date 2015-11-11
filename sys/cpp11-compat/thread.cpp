@@ -18,7 +18,7 @@
  * @}
  */
 
-#include "vtimer.h"
+#include "xtimer.h"
 
 #include <cerrno>
 #include <system_error>
@@ -87,8 +87,8 @@ void sleep_for(const chrono::nanoseconds& ns) {
     timex_t reltime;
     reltime.seconds = ts.tv_sec;
     reltime.microseconds = ts.tv_nsec / 1000u;
-    vtimer_t timer;
-    vtimer_set_wakeup(&timer, reltime, sched_active_pid);
+    xtimer_t timer;
+    xtimer_set_wakeup(&timer, timex_uint64(reltime), sched_active_pid);
     thread_sleep();
   }
 }
