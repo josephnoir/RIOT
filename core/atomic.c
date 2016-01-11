@@ -33,12 +33,14 @@ int atomic_cas(atomic_int_t *var, int old, int now)
 {
     unsigned int mask = disableIRQ();
 
+    __asm__ volatile("" : : : "memory");
     if (ATOMIC_VALUE(*var) != old) {
         restoreIRQ(mask);
         return 0;
     }
 
     ATOMIC_VALUE(*var) = now;
+    __asm__ volatile("" : : : "memory"); 
     restoreIRQ(mask);
     return 1;
 }
