@@ -51,7 +51,7 @@ class time_point {
   /**
    * @brief create time point from timex_t struct
    */
-  inline time_point(timex_t&& tp) : m_handle(tp) {}
+  explicit inline time_point(timex_t&& tp) : m_handle(tp) {}
   constexpr time_point(const time_point& tp) = default;
   constexpr time_point(time_point&& tp) = default;
 
