@@ -105,6 +105,16 @@ void pm_set(unsigned mode)
             break;
     }
 #elif defined(CPU_FAM_STM32L4)
+    /**
+     * To wakeup from Stop mode with an RTC alarm event, it is necessary to:
+     * - Configure the EXTI Line 18 to be sensitive to rising edge
+     * - Configure the RTC to generate the RTC alarm
+     * To wakeup from Standby mode, there is no need to configure the EXTI Line 18.
+     * To wakeup from Stop mode with an RTC wakeup event, it is necessary to:
+     * - Configure the EXTI Line 20 to be sensitive to rising edge
+     * - Configure the RTC to generate the RTC alarm
+     * All on page 179.
+     */
     switch (mode) {
         case SYSTEM_SLEEPMODE_SHUTDOWN:
             /**
