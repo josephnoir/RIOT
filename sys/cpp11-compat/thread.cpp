@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Hamburg University of Applied Sciences (HAW)
+ * Copyright (C) 2017 Hamburg University of Applied Sciences (HAW)
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
@@ -70,9 +70,9 @@ unsigned thread::hardware_concurrency() noexcept {
 
 namespace this_thread {
 
-void sleep_for(const chrono::nanoseconds& ns) {
-  using namespace chrono;
-  if (ns > nanoseconds::zero()) {
+void sleep_for(const std::chrono::nanoseconds& ns) {
+  using namespace std::chrono;
+  if (ns > std::chrono::nanoseconds::zero()) {
     xtimer_usleep64(static_cast<uint64_t>(duration_cast<microseconds>(ns).count()));
   }
 }
