@@ -133,12 +133,12 @@ public:
 // duration_cast
 namespace detail {
 
-template <class ToDuration, class CF, class CR,
+template <class ToDur, class CF, class CR,
           bool NumOne = false, bool DenOne = false>
 struct duration_cast_impl {
   template <class Rep, class Period>
-  static constexpr ToDuration cast(const duration<Rep, Period>& d) {
-    return ToDuration(static_cast<typename ToDuration::rep>(
+  static constexpr ToDur cast(const duration<Rep, Period>& d) {
+    return ToDur(static_cast<typename ToDur::rep>(
       static_cast<CR>(d.count()) *
       static_cast<CR>(CF::num)   /
       static_cast<CR>(CF::den))
@@ -146,32 +146,32 @@ struct duration_cast_impl {
   }
 };
 
-template <class ToDuration, class CF, class CR>
-struct duration_cast_impl<ToDuration, CF, CR, true, true> {
+template <class ToDur, class CF, class CR>
+struct duration_cast_impl<ToDur, CF, CR, true, true> {
   template <class Rep, class Period>
-  static constexpr ToDuration cast(const duration<Rep, Period>& d) {
-    return ToDuration(static_cast<typename ToDuration::rep>(d.count()));
+  static constexpr ToDur cast(const duration<Rep, Period>& d) {
+    return ToDur(static_cast<typename ToDur::rep>(d.count()));
   }
 };
 
-template <class ToDuration, class CF, class CR>
-struct duration_cast_impl<ToDuration, CF, CR, true, false> {
+template <class ToDur, class CF, class CR>
+struct duration_cast_impl<ToDur, CF, CR, true, false> {
   template <class Rep, class Period>
-  static constexpr ToDuration cast(const duration<Rep, Period>& d) {
-    return ToDuration(
-      static_cast<typename ToDuration::rep>(
+  static constexpr ToDur cast(const duration<Rep, Period>& d) {
+    return ToDur(
+      static_cast<typename ToDur::rep>(
         static_cast<CR>(d.count()) / static_cast<CR>(CF::den)
       )
     );
   }
 };
 
-template <class ToDuration, class CF, class CR>
-struct duration_cast_impl<ToDuration, CF, CR, false, true> {
+template <class ToDur, class CF, class CR>
+struct duration_cast_impl<ToDur, CF, CR, false, true> {
   template <class Rep, class Period>
-  static constexpr ToDuration cast(const duration<Rep, Period>& d) {
-    return ToDuration(
-      static_cast<typename ToDuration::rep>(
+  static constexpr ToDur cast(const duration<Rep, Period>& d) {
+    return ToDur(
+      static_cast<typename ToDur::rep>(
         static_cast<CR>(d.count()) * static_cast<CR>(CF::num)
       )
     );
@@ -181,16 +181,16 @@ struct duration_cast_impl<ToDuration, CF, CR, false, true> {
 } // namespace detail
 
 // see: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2661.htm#duration
-// TODO: check that ToDuration is a duration and "Notes" on cppreference
-template <class ToDuration, class Rep, class Period, typename std::enable_if<
-            is_duration<ToDuration>::value,
+// TODO: check that ToDur is a duration and "Notes" on cppreference
+template <class ToDur, class Rep, class Period, typename std::enable_if<
+            is_duration<ToDur>::value,
           int>::type = 0>
-constexpr ToDuration duration_cast(const duration<Rep, Period>& d) {
+constexpr ToDur duration_cast(const duration<Rep, Period>& d) {
   using CF
-    = typename std::ratio_divide<Period, typename ToDuration::period>::type;
+    = typename std::ratio_divide<Period, typename ToDur::period>::type;
   using CR
-    = typename std::common_type<typename ToDuration::rep, Rep, intmax_t>::type;
-  return detail::duration_cast_impl<ToDuration, CF, CR, 
+    = typename std::common_type<typename ToDur::rep, Rep, intmax_t>::type;
+  return detail::duration_cast_impl<ToDur, CF, CR, 
                                     CF::num == 1,
                                     CF::den == 1>::cast(d);
 }
@@ -198,7 +198,6 @@ constexpr ToDuration duration_cast(const duration<Rep, Period>& d) {
 template <class Rep>
 struct treat_as_floating_point : std::is_floating_point<Rep> {};
 
-// class template duration
 template <class Rep, class Period = std::ratio<1>>
 class duration {
   static_assert(Period::num > 0, "TODO: message");
@@ -221,7 +220,6 @@ public:
     // nop
   }
 
-  // , or 
   template <class Rep2, class Period2,
             typename std::enable_if<
               treat_as_floating_point<rep>::value ||
@@ -328,7 +326,7 @@ public:
 
 public:
   constexpr time_point() : d_{0} {
-    
+    // nop
   }
 
   // same as time_point() + d
@@ -358,7 +356,7 @@ public:
     d_ -= d;
     return d_;
   }
-  
+
   // TODO: are these the expected values?
   static constexpr time_point min() {
     return {duration::min()};
@@ -554,7 +552,8 @@ template <class Clock, class Duration1, class Duration2>
 constexpr bool operator==(const time_point<Clock, Duration1>& lhs,
                           const time_point<Clock, Duration2>& rhs) {
   using CT = typename std::common_type<Duration1, Duration2>::type;
-  return duration_cast<CT>(lhs.time_since_epoch()) == duration_cast<CT>(rhs.time_since_epoch());
+  return duration_cast<CT>(lhs.time_since_epoch()) ==
+    duration_cast<CT>(rhs.time_since_epoch());
 }
 
 
@@ -568,7 +567,8 @@ template <class Clock, class Duration1, class Duration2>
 constexpr bool operator< (const time_point<Clock, Duration1>& lhs,
                           const time_point<Clock, Duration2>& rhs) {
   using CT = typename std::common_type<Duration1, Duration2>::type;
-  return duration_cast<CT>(lhs.time_since_epoch()) < duration_cast<CT>(rhs.time_since_epoch());
+  return duration_cast<CT>(lhs.time_since_epoch()) <
+    duration_cast<CT>(rhs.time_since_epoch());
 }
 
 
@@ -591,52 +591,51 @@ constexpr bool operator>=(const time_point<Clock, Duration1>& lhs,
 }
 
 // time_point_cast
-template <class ToDuration, class Clock, class Duration>
-constexpr time_point<Clock, ToDuration>
-time_point_cast(const time_point<Clock, Duration>& t);
+template <class ToDur, class Clock, class Duration,
+          typename std::enable_if<
+            is_duration<ToDur>::value,
+          int>::type = 0>
+constexpr time_point<Clock, ToDur>
+time_point_cast(const time_point<Clock, Duration>& t) {
+  return time_point<Clock, ToDur>{duration_cast<ToDur>(t.time_since_epoch())};
+}
 
-template <class ToDuration, class Clock, class Duration>
-constexpr time_point<Clock, ToDuration>
-floor(const time_point<Clock, Duration>& tp);
-
-template <class ToDuration, class Clock, class Duration>
-constexpr time_point<Clock, ToDuration>
-ceil(const time_point<Clock, Duration>& tp);
-
-template <class ToDuration, class Clock, class Duration>
-constexpr time_point<Clock, ToDuration>
-round(const time_point<Clock, Duration>& tp);
-
-// specialized algorithms
-template <class Rep, class Period>
-constexpr duration<Rep, Period> abs(duration<Rep, Period> d);
 
 // clocks
-class system_clock;
+//class system_clock;
 //class steady_clock;
 //class high_resolution_clock;
-} // namespace chrono
-
-namespace chrono {
-
-using namespace literals::chrono_literals;
-
-} // namespace chrono
-
-namespace chrono {
 
 class system_clock {
 public:
-  using rep = std::chrono::duration::rep;
-  using period = std::chrono::duration::period;
-  using duration = std::chrono::duration<rep, period>;
-  using time_point = std::chrono::time_point<system_clock>;
+  using duration = microseconds;
+  using rep = duration::rep;
+  using period = duration::period;
+  using time_point = chrono::time_point<system_clock, duration>;
+
   static constexpr bool is_steady = false;
+
   static time_point now() noexcept;
-  // Map to C API
+
   static timex_t to_time_t (const time_point& t) noexcept;
+
   static time_point from_time_t(timex_t t) noexcept;
+
+private:
+  static constexpr rep microsecs_in_sec = 1000000;
 };
+
+/*
+class high_resolution_clock {
+public:
+  using rep = //unspecified ;
+  using period = ratio<//unspecified, unspecified>;
+  using duration = chrono::duration<rep, period>;
+  using time_point = chrono::time_point<//unspecified, duration>;
+  static constexpr bool is_steady = //unspecified ;
+  static time_point now() noexcept;
+};
+
 */
 
 } // namespace chrono
