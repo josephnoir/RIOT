@@ -12,7 +12,7 @@
  *
  * @file
  * @brief  C++11 chrono drop in replacement that adds the function now based on
- *         xtimer/timex
+ *         xtimer
  *
  * @author Raphael Hiesgen <raphael.hiesgen (at) haw-hamburg.de>
  *
@@ -27,9 +27,7 @@ namespace riot {
 namespace chrono {
 
 system_clock::time_point system_clock::now() noexcept {
-  timex_t tp;
-  xtimer_now_timex(&tp);
-  rep msecs = tp.microseconds + tp.seconds * microsecs_in_sec;
+  rep msecs = xtimer_now_usec64();
   return time_point{duration{msecs}};
 }
 
